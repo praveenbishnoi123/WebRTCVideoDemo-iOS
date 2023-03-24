@@ -210,7 +210,7 @@ final class WebRTCClient: NSObject {
     func closePeerConnection(){
         self.peerConnection.close()
     }
-    func removeLocalStream(){
+    func removeLocalStream() {
         let streams: [RTCMediaStream] = peerConnection.localStreams
         for stream in streams{
             stream.audioTracks.forEach { track in
@@ -222,7 +222,6 @@ final class WebRTCClient: NSObject {
                 peerConnection.removeTrack(videoSender)
             }
         }
-        
     }
 }
 
