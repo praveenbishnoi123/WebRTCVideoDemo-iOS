@@ -39,7 +39,7 @@ final class WebRTCClient: NSObject {
     var localDataChannel: RTCDataChannel?
     var remoteDataChannel: RTCDataChannel?
     var captureSession: AVCaptureSession?
-    var usingFrontCamera = false
+    var cameraDevicePosition: AVCaptureDevice.Position = .front
     @available(*, unavailable)
     override init() {
         fatalError("WebRTCClient:init is unavailable")
@@ -74,6 +74,7 @@ final class WebRTCClient: NSObject {
                                              optionalConstraints: nil)
         self.peerConnection.offer(for: constrains) { (sdp, error) in
             guard let sdp = sdp else {
+                debugPrint("errpr sdp===== ",error?.localizedDescription)
                 return
             }
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
@@ -91,6 +92,7 @@ final class WebRTCClient: NSObject {
             }
             
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
+                debugPrint("sdp answer=== ",error?.localizedDescription)
                 completion(sdp)
             })
         }
@@ -340,36 +342,50 @@ extension WebRTCClient {
 }
 extension WebRTCClient:RTCVideoCapturerDelegate{
     func capturer(_ capturer: RTCVideoCapturer, didCapture frame: RTCVideoFrame) {
-        
+        debugPrint("did capture======")
     }
 
-    func switchCamera(){
-        captureSession?.beginConfiguration()
-            let currentInput = captureSession?.inputs.first as? AVCaptureDeviceInput
-        captureSession?.removeInput(currentInput!)
-            let newCameraDevice = currentInput?.device.position == .back ? getCamera(with: .front) : getCamera(with: .back)
-            let newVideoInput = try? AVCaptureDeviceInput(device: newCameraDevice!)
-        captureSession?.addInput(newVideoInput!)
-        captureSession?.commitConfiguration()
-        captureSession?.startRunning()
-    }
-    
-    func getCamera(with position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        guard let devices = AVCaptureDevice.devices(for: AVMediaType.video) as? [AVCaptureDevice] else {
-            return nil
+    func switchCameraPosition(){
+        if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
+            capturer.stopCapture {
+                let position = (self.cameraDevicePosition == .front) ? AVCaptureDevice.Position.back : AVCaptureDevice.Position.front
+                self.cameraDevicePosition = position
+                self.startCaptureLocalVideo(cameraPositon: position, videoWidth: 640, videoHeight: 640*16/9, videoFps: 30)
+            }
         }
-        
-        return devices.filter {
-            $0.position == position
-            }.first
     }
-    
-    func getFrontCamera() -> AVCaptureDevice?{
-        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front).devices.first
-    }
-
-    func getBackCamera() -> AVCaptureDevice?{
-        return AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back).devices.first
+    func startCaptureLocalVideo(cameraPositon: AVCaptureDevice.Position, videoWidth: Int, videoHeight: Int?, videoFps: Int) {
+        if let capturer = self.videoCapturer as? RTCCameraVideoCapturer {
+            var targetDevice: AVCaptureDevice?
+            var targetFormat: AVCaptureDevice.Format?
+            
+            // find target device
+            let devicies = RTCCameraVideoCapturer.captureDevices()
+            devicies.forEach { (device) in
+                if device.position ==  cameraPositon{
+                    targetDevice = device
+                }
+            }
+            
+            // find target format
+            let formats = RTCCameraVideoCapturer.supportedFormats(for: targetDevice!)
+            formats.forEach { (format) in
+                for _ in format.videoSupportedFrameRateRanges {
+                    let description = format.formatDescription as CMFormatDescription
+                    let dimensions = CMVideoFormatDescriptionGetDimensions(description)
+                    
+                    if dimensions.width == videoWidth && dimensions.height == videoHeight ?? 0{
+                        targetFormat = format
+                    } else if dimensions.width == videoWidth {
+                        targetFormat = format
+                    }
+                }
+            }
+            
+            capturer.startCapture(with: targetDevice!,
+                                  format: targetFormat!,
+                                  fps: videoFps)
+        }
     }
 }
 extension WebRTCClient: RTCDataChannelDelegate {

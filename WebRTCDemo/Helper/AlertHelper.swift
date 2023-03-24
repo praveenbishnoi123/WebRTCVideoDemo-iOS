@@ -13,7 +13,10 @@ class AlertHelper{
     class func showAlert(controller:UIViewController,message:String){
         let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        controller.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            controller.present(alert, animated: true, completion: nil)
+        }
+        
     }
     class func convertJsonToString(dic:[String:Any?]) ->String {
         do{
