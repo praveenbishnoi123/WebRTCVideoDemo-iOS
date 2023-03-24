@@ -121,13 +121,18 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AgR-yJ-Azq">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5be-nU-0bG">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5be-nU-0bG" customClass="AADraggableView" customModule="WebRTCDemo" customModuleProvider="target">
                                         <rect key="frame" x="184" y="15" width="128" height="155"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="128" id="9RY-rt-B3f"/>
                                             <constraint firstAttribute="height" constant="155" id="mUv-Ey-iVF"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="padding">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="bUv-IC-moo">
                                         <rect key="frame" x="50" y="508" width="220" height="50"/>
@@ -209,6 +214,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomConstraint" destination="PQy-wT-bVn" id="jH3-tc-rCa"/>
                         <outlet property="btnCameraOff" destination="p0R-Zv-T8x" id="v83-HG-1gU"/>
                         <outlet property="btnCameraSwitch" destination="0Wr-Vu-gJT" id="zvA-lJ-wsh"/>
                         <outlet property="btnMute" destination="YVq-9u-09z" id="F4G-uJ-1ry"/>
@@ -216,6 +222,8 @@
                         <outlet property="lblWebRTCStatus" destination="dGc-OC-1RM" id="plj-2F-UGG"/>
                         <outlet property="localView" destination="5be-nU-0bG" id="4Eq-EZ-zTc"/>
                         <outlet property="remoteView" destination="AgR-yJ-Azq" id="Gp8-EO-vFa"/>
+                        <outlet property="rightConstraint" destination="DsY-RK-v6L" id="jty-dX-wuw"/>
+                        <outlet property="topConstraint" destination="qHN-qf-veM" id="tm0-Zd-sO0"/>
                         <outlet property="txtCall" destination="A3v-Tu-XFV" id="2Lt-U4-9JZ"/>
                     </connections>
                 </viewController>

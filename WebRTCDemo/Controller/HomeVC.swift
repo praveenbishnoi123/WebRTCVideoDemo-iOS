@@ -33,10 +33,10 @@ class HomeVC: UIViewController {
         }
     }
     @IBOutlet weak var remoteView: UIView!
-    @IBOutlet weak var localView: UIView!
+    @IBOutlet weak var localView: AADraggableView!
     var localRenderer : RTCEAGLVideoView!
     var remoteRenderer : RTCEAGLVideoView!
-    
+    @IBOutlet weak var customViewHeight: NSLayoutConstraint!
     @IBOutlet weak var btnMute: UIButton!
     
     @IBOutlet weak var btnCameraSwitch: UIButton!
@@ -63,15 +63,35 @@ class HomeVC: UIViewController {
         }
     }
     var isCallPicked = false
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var rightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var leftConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    
+    struct ResizeRect{
+        var topTouch = false
+        var leftTouch = false
+        var rightTouch = false
+        var bottomTouch = false
+        var middelTouch = false
+    }
+    
+    var touchStart = CGPoint.zero
+    var proxyFactor = CGFloat(10)
+    var resizeRect = ResizeRect()
+   // var views: [AADraggableView]!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.signalingConnected = false
         initiateConnection()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        
+       // localView.delegate = self
+    }
     func initiateConnection(){
         webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
         signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
-        //self.remoteView.
         self.webRTCClient.delegate = self
         self.signalClient.delegate = self
         self.signalClient.connect()
@@ -89,6 +109,11 @@ class HomeVC: UIViewController {
         if let localVideoView = self.localView {
             self.embedView(localRenderer, into: localVideoView)
         }
+        localView.reposition = .edgesOnly
+        localView.respectedView = remoteView
+        self.localRenderer.transform = CGAffineTransformMakeScale(-1.0, 1.0)
+        
+        self.remoteRenderer.transform = CGAffineTransformMakeScale(-1.0, 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
         self.remoteView.sendSubviewToBack(remoteRenderer)
     }
@@ -184,7 +209,7 @@ extension HomeVC: SignalClientDelegate {
     func removeVideoViews(){
         DispatchQueue.main.async {
             self.remoteView.isHidden = true
-            self.remoteView = nil
+            self.remoteRenderer.removeFromSuperview()
             self.remoteRenderer = nil
             self.localRenderer = nil
             self.isCallPicked = false
@@ -274,3 +299,18 @@ extension HomeVC: WebRTCClientDelegate {
         }
     }
 }
+//extension HomeVC: AADraggableViewDelegate {
+//    func draggingDidBegan(_ sender: UIView) {
+//        sender.layer.zPosition = 1
+//        sender.layer.shadowOffset = CGSize(width: 0, height: 20)
+//        sender.layer.shadowOpacity = 0.3
+//        sender.layer.shadowRadius = 6
+//    }
+//
+//    func draggingDidEnd(_ sender: UIView) {
+//        sender.layer.zPosition = 0
+//        sender.layer.shadowOffset = CGSize.zero
+//        sender.layer.shadowOpacity = 0.0
+//        sender.layer.shadowRadius = 0
+//    }
+//}

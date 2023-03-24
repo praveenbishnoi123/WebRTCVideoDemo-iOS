@@ -14,6 +14,8 @@
 		841B085429AE062C00AAD169 /* RTCStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841B085329AE062C00AAD169 /* RTCStates.swift */; };
 		84BFCE6229C07EF00079A761 /* UserLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFCE6129C07EF00079A761 /* UserLoginVC.swift */; };
 		84BFCE6429C0818B0079A761 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFCE6329C0818B0079A761 /* AlertHelper.swift */; };
+		84BFCE6929CDB8070079A761 /* AADraggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFCE6629CDB8070079A761 /* AADraggableView.swift */; };
+		84BFCE6B29CDB8070079A761 /* AADraggableView+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFCE6829CDB8070079A761 /* AADraggableView+Helper.swift */; };
 		84EEA03C29A5FC7A009D1298 /* Configure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEA03B29A5FC7A009D1298 /* Configure.swift */; };
 		84EEA03E29A61AF8009D1298 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEA03D29A61AF8009D1298 /* WebRTCClient.swift */; };
 		84EEA04129A746D6009D1298 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EEA03F29A746D6009D1298 /* HomeVC.swift */; };
@@ -39,6 +41,8 @@
 		841B085329AE062C00AAD169 /* RTCStates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RTCStates.swift; sourceTree = "<group>"; };
 		84BFCE6129C07EF00079A761 /* UserLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginVC.swift; sourceTree = "<group>"; };
 		84BFCE6329C0818B0079A761 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
+		84BFCE6629CDB8070079A761 /* AADraggableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AADraggableView.swift; sourceTree = "<group>"; };
+		84BFCE6829CDB8070079A761 /* AADraggableView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AADraggableView+Helper.swift"; sourceTree = "<group>"; };
 		84EEA03B29A5FC7A009D1298 /* Configure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configure.swift; sourceTree = "<group>"; };
 		84EEA03D29A61AF8009D1298 /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
 		84EEA03F29A746D6009D1298 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -104,6 +108,15 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		84BFCE6529CDB8070079A761 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				84BFCE6629CDB8070079A761 /* AADraggableView.swift */,
+				84BFCE6829CDB8070079A761 /* AADraggableView+Helper.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		84EEA04729A76871009D1298 /* Websocket */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +172,7 @@
 		84FFFBE22996224600D2D576 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				84BFCE6529CDB8070079A761 /* Classes */,
 				841B085229AE061D00AAD169 /* Extension */,
 				841B082D29AE03E400AAD169 /* Camera */,
 				84EEA04729A76871009D1298 /* Websocket */,
@@ -304,6 +318,8 @@
 				84EEA03C29A5FC7A009D1298 /* Configure.swift in Sources */,
 				84EEA04629A76863009D1298 /* Message.swift in Sources */,
 				841B085429AE062C00AAD169 /* RTCStates.swift in Sources */,
+				84BFCE6929CDB8070079A761 /* AADraggableView.swift in Sources */,
+				84BFCE6B29CDB8070079A761 /* AADraggableView+Helper.swift in Sources */,
 				84EEA04429A76695009D1298 /* SignalingClient.swift in Sources */,
 				84FFFBCE2996219400D2D576 /* AppDelegate.swift in Sources */,
 				841B085029AE057900AAD169 /* IceCandidate.swift in Sources */,
