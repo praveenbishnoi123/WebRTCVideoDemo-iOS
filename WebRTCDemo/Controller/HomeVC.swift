@@ -53,27 +53,28 @@ class HomeVC: UIViewController {
             }
         }
     }
+    var isShowVideo:Bool = true{
+        didSet{
+            if isShowVideo{
+                webRTCClient.showVideo()
+            }else{
+                webRTCClient.hideVideo()
+            }
+        }
+    }
     var isCallPicked = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.signalingConnected = false
+        initiateConnection()
+    }
+    func initiateConnection(){
         webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
         signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
+        //self.remoteView.
         self.webRTCClient.delegate = self
         self.signalClient.delegate = self
         self.signalClient.connect()
-    }
-    func initiateConnection(){
-        if webRTCClient == nil{
-            webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
-            signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
-            let state = self.webRTCClient.peerConnection.connectionState
-            if state == .closed || state == .disconnected || state == .failed {
-                self.webRTCClient.delegate = self
-                self.signalClient.delegate = self
-                self.signalClient.connect()
-            }
-        }
     }
     func setUpView(){
         txtCall.resignFirstResponder()
@@ -107,7 +108,7 @@ class HomeVC: UIViewController {
     }
     
     @IBAction func onClickCall(_ sender: Any) {
-        initiateConnection()
+       // initiateConnection()
         if txtCall.text!.isEmpty{
             AlertHelper.showAlert(controller: self, message: "Please enter name whom you want to call")
         }else{
@@ -135,7 +136,6 @@ extension HomeVC: SignalClientDelegate {
                         let strData = AlertHelper.convertJsonToString(dic: dic)
                         self.signalClient.sendData(data: strData)
                     }
-                    
                 }
             }else if type == "offer_received"{
                 
@@ -183,14 +183,14 @@ extension HomeVC: SignalClientDelegate {
     
     func removeVideoViews(){
         DispatchQueue.main.async {
-           // self.remoteView.removeFromSuperview()
             self.remoteView.isHidden = true
+            self.remoteView = nil
             self.remoteRenderer = nil
             self.localRenderer = nil
             self.isCallPicked = false
             self.webRTCClient.closePeerConnection()
-            self.webRTCClient = nil
-           // self.initiateConnection()
+           // self.webRTCClient = nil
+            self.initiateConnection()
         }
     }
     func signalClientDidConnect(_ signalClient: SignalingClient) {
@@ -221,10 +221,10 @@ extension HomeVC: SignalClientDelegate {
         isMuteAudio = !isMuteAudio
     }
     @IBAction func onClickCameraOff(_ sender: Any) {
-        
+        isShowVideo = !isShowVideo
     }
     @IBAction func onClickCameraSwitch(_ sender: Any) {
-        
+        self.webRTCClient.switchCameraPosition()
     }
     @IBAction func onClickDisconnect(_ sender: Any) {
         var strCall = "end_call"
