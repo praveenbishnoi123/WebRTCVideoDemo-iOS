@@ -7,6 +7,7 @@
 
 import UIKit
 import WebRTC
+import AVKit
 
 class HomeVC: UIViewController {
 
@@ -17,6 +18,12 @@ class HomeVC: UIViewController {
     let config = Config.default
     var isSendOffer = false
     var strUserName = ""
+    
+   //c var pip : AVPictureInPictureController?
+    
+    //let pipVideoCallViewController = AVPictureInPictureVideoCallViewController()
+
+    
     @IBOutlet weak var txtCall: UITextField!
     private var signalingConnected: Bool = false {
         didSet {
@@ -82,6 +89,8 @@ class HomeVC: UIViewController {
    // var views: [AADraggableView]!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("isVideoEnable \(Helper.checkifVideoEnable())")
         self.signalingConnected = false
         initiateConnection()
     }
@@ -111,9 +120,9 @@ class HomeVC: UIViewController {
         }
         localView.reposition = .edgesOnly
         localView.respectedView = remoteView
-        self.localRenderer.transform = CGAffineTransformMakeScale(-1.0, 1.0)
+        self.localRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         
-        self.remoteRenderer.transform = CGAffineTransformMakeScale(-1.0, 1.0)
+        self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
         self.remoteView.sendSubviewToBack(remoteRenderer)
     }
@@ -144,6 +153,7 @@ class HomeVC: UIViewController {
     }
 
 }
+
 extension HomeVC: SignalClientDelegate {
     func signalClientReceiveString(_ signalClient: SignalingClient, didReceiveString data: String) {
         let json = AlertHelper.convertToJson(text: data)
@@ -263,6 +273,7 @@ extension HomeVC: SignalClientDelegate {
     }
 }
 
+
 extension HomeVC: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
@@ -314,3 +325,13 @@ extension HomeVC: WebRTCClientDelegate {
 //        sender.layer.shadowRadius = 0
 //    }
 //}
+
+class SampleBufferVideoCallView: UIView {
+    override class var layerClass: AnyClass {
+        AVSampleBufferDisplayLayer.self
+    }
+    
+    var sampleBufferDisplayLayer: AVSampleBufferDisplayLayer {
+        layer as! AVSampleBufferDisplayLayer
+    }
+}

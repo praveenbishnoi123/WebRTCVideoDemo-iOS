@@ -134,6 +134,7 @@ final class WebRTCClient: NSObject {
                               format: format,
                               fps: Int(fps.maxFrameRate))
         
+        
         self.localVideoTrack?.add(renderer)
     }
     

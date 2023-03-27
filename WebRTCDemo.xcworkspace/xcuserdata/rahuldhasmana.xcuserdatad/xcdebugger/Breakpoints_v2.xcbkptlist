@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "268A1BCD-8255-4CFD-B15B-F1186E7CA6E6"
+            uuid = "3B785078-4C2E-4C24-8A83-B60FBB719201"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WebRTCDemo/Controller/HomeVC.swift"
+            filePath = "WebRTCDemo/Controller/UserLoginVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "setUpView()"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "onClickRegister(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B8CE71CA-7D6F-4AFF-9B2C-3862BE1A3E3F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WebRTCDemo/Controller/UserLoginVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "onClickRegister(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

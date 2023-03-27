@@ -21,10 +21,15 @@ class UserLoginVC: UIViewController {
         if txtUserName.text!.isEmpty{
             AlertHelper.showAlert(controller: self, message: "Please enter user name")
         }else{
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
-            vc.strUserName = self.txtUserName.text!
-            vc.modalPresentationStyle = .fullScreen
-            self.present(vc, animated: true)
+           // if #available(iOS 15.0, *) {
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+                vc.strUserName = self.txtUserName.text!
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+//            } else {
+//                // Fallback on earlier versions
+//            }
+            
         }
     }
 }
