@@ -10,7 +10,7 @@ import WebRTC
 
 
 class VideoVC: UIViewController {
-
+    
     @IBOutlet weak var viewLocal: UIView!
     @IBOutlet weak var btnMute: UIButton!
     @IBOutlet weak var btnSpeaker: UIButton!
@@ -43,11 +43,11 @@ class VideoVC: UIViewController {
         }
     }
     
-   
+    
     var session: AVCaptureSession?
-       var input: AVCaptureDeviceInput?
-       var output: AVCaptureStillImageOutput?
-       var previewLayer: AVCaptureVideoPreviewLayer?
+    var input: AVCaptureDeviceInput?
+    var output: AVCaptureStillImageOutput?
+    var previewLayer: AVCaptureVideoPreviewLayer?
     
     var localRenderer : RTCEAGLVideoView = RTCEAGLVideoView.init()
     var remoteRenderer : RTCEAGLVideoView = RTCEAGLVideoView.init()
@@ -116,54 +116,54 @@ class VideoVC: UIViewController {
     }
     @IBAction func onClickCameraSwitch(_ sender: Any) {
         //webRTCClient.switchCamera()
-         //reloadCamera()
-
-            
+        //reloadCamera()
+        
+        
     }
     
     func reloadCamera() {
-
+        
         //Initialize session an output variables this is necessary
         session = webRTCClient.captureSession
-           output = AVCaptureStillImageOutput()
+        output = AVCaptureStillImageOutput()
         let camera = getDevice(position: .back)
         debugPrint("decice==== ",camera?.deviceType.rawValue)
-           do {
-               input = try AVCaptureDeviceInput(device: camera!)
-           } catch let error as NSError {
-              print(error)
-              input = nil
-           }
-        if(session?.canAddInput(input!) == true){
-              session?.addInput(input!)
-            output?.outputSettings = [AVVideoCodecKey : AVVideoCodecType.jpeg]
-              if(session?.canAddOutput(output!) == true){
-                 session?.addOutput(output!)
-                 previewLayer = AVCaptureVideoPreviewLayer(session: session!)
-                  previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-                  previewLayer?.connection!.videoOrientation = AVCaptureVideoOrientation.portrait
-                 previewLayer?.frame = viewLocal.bounds
-                  viewLocal.layer.addSublayer(previewLayer!)
-                 session?.startRunning()
-              }
-           }
+        do {
+            input = try AVCaptureDeviceInput(device: camera!)
+        } catch let error as NSError {
+            print(error)
+            input = nil
         }
+        if(session?.canAddInput(input!) == true){
+            session?.addInput(input!)
+            output?.outputSettings = [AVVideoCodecKey : AVVideoCodecType.jpeg]
+            if(session?.canAddOutput(output!) == true){
+                session?.addOutput(output!)
+                previewLayer = AVCaptureVideoPreviewLayer(session: session!)
+                previewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
+                previewLayer?.connection!.videoOrientation = AVCaptureVideoOrientation.portrait
+                previewLayer?.frame = viewLocal.bounds
+                viewLocal.layer.addSublayer(previewLayer!)
+                session?.startRunning()
+            }
+        }
+    }
     @IBAction func onClickDisconnect(_ sender: Any) {
         webRTCClient.removeLocalStream()
         dismissVC()
     }
     func getDevice(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera], mediaType: AVMediaType.video, position: .front).devices.first
-//       for de in devices {
-//           let deviceConverted = de
-//          if(deviceConverted.position == position){
-//             return deviceConverted
-//          }
-//       }
-       return devices
+        //       for de in devices {
+        //           let deviceConverted = de
+        //          if(deviceConverted.position == position){
+        //             return deviceConverted
+        //          }
+        //       }
+        return devices
     }
     
-        
+    
     
 }
 extension VideoVC: WebRTCClientDelegate {

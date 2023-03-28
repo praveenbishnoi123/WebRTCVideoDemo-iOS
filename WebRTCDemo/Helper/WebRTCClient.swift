@@ -91,13 +91,12 @@ final class WebRTCClient: NSObject {
             guard let sdp = sdp else {
                 return
             }
-            
+        
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
                // debugPrint("sdp answer=== ",error?.localizedDescription)
                 completion(sdp)
             })
         }
-        
     }
     
     func set(remoteSdp: RTCSessionDescription, completion: @escaping (Error?) -> ()) {
@@ -133,6 +132,7 @@ final class WebRTCClient: NSObject {
         capturer.startCapture(with: frontCamera,
                               format: format,
                               fps: Int(fps.maxFrameRate))
+        
         
         self.localVideoTrack?.add(renderer)
     }
@@ -212,7 +212,7 @@ final class WebRTCClient: NSObject {
     func closePeerConnection(){
         self.peerConnection.close()
     }
-    func removeLocalStream(){
+    func removeLocalStream() {
         let streams: [RTCMediaStream] = peerConnection.localStreams
         for stream in streams{
             stream.audioTracks.forEach { track in
@@ -224,7 +224,6 @@ final class WebRTCClient: NSObject {
                 peerConnection.removeTrack(videoSender)
             }
         }
-        
     }
 }
 

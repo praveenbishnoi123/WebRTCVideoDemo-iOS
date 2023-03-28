@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65C260D929D1780700945D24 /* Configuration.json in Sources */ = {isa = PBXBuildFile; fileRef = 65C260D829D1780700945D24 /* Configuration.json */; };
+		65C260DB29D178C200945D24 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C260DA29D178C200945D24 /* Helper.swift */; };
+		65C260DC29D17B7D00945D24 /* Configuration.json in Resources */ = {isa = PBXBuildFile; fileRef = 65C260D829D1780700945D24 /* Configuration.json */; };
 		841B082129A7925F00AAD169 /* VideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841B082029A7925F00AAD169 /* VideoVC.swift */; };
 		841B082329A878E700AAD169 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841B082229A878E700AAD169 /* HomeViewModel.swift */; };
 		841B085029AE057900AAD169 /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841B084E29AE057900AAD169 /* IceCandidate.swift */; };
@@ -34,6 +37,8 @@
 
 /* Begin PBXFileReference section */
 		0D674CC33E81C42F8B6DDE7E /* Pods_WebRTCDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTCDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65C260D829D1780700945D24 /* Configuration.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Configuration.json; sourceTree = "<group>"; };
+		65C260DA29D178C200945D24 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		841B082029A7925F00AAD169 /* VideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoVC.swift; sourceTree = "<group>"; };
 		841B082229A878E700AAD169 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		841B084E29AE057900AAD169 /* IceCandidate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IceCandidate.swift; sourceTree = "<group>"; };
@@ -153,6 +158,7 @@
 				84FFFBCD2996219400D2D576 /* AppDelegate.swift */,
 				84FFFBCF2996219400D2D576 /* SceneDelegate.swift */,
 				84FFFBD12996219400D2D576 /* ViewController.swift */,
+				65C260D829D1780700945D24 /* Configuration.json */,
 				84FFFBD32996219400D2D576 /* Main.storyboard */,
 				84FFFBD62996219700D2D576 /* Assets.xcassets */,
 				84FFFBD82996219700D2D576 /* LaunchScreen.storyboard */,
@@ -181,6 +187,7 @@
 				84EEA03D29A61AF8009D1298 /* WebRTCClient.swift */,
 				84EEA04529A76863009D1298 /* Message.swift */,
 				84BFCE6329C0818B0079A761 /* AlertHelper.swift */,
+				65C260DA29D178C200945D24 /* Helper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -255,6 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65C260DC29D17B7D00945D24 /* Configuration.json in Resources */,
 				84FFFBDA2996219700D2D576 /* LaunchScreen.storyboard in Resources */,
 				84FFFBD72996219700D2D576 /* Assets.xcassets in Resources */,
 				84FFFBD52996219400D2D576 /* Main.storyboard in Resources */,
@@ -316,7 +324,9 @@
 				84BFCE6229C07EF00079A761 /* UserLoginVC.swift in Sources */,
 				841B082129A7925F00AAD169 /* VideoVC.swift in Sources */,
 				84EEA03C29A5FC7A009D1298 /* Configure.swift in Sources */,
+				65C260D929D1780700945D24 /* Configuration.json in Sources */,
 				84EEA04629A76863009D1298 /* Message.swift in Sources */,
+				65C260DB29D178C200945D24 /* Helper.swift in Sources */,
 				841B085429AE062C00AAD169 /* RTCStates.swift in Sources */,
 				84BFCE6929CDB8070079A761 /* AADraggableView.swift in Sources */,
 				84BFCE6B29CDB8070079A761 /* AADraggableView+Helper.swift in Sources */,
@@ -474,31 +484,34 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = UJ8LU8NH7Z;
+				DEVELOPMENT_TEAM = X94D2R35AW;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = X94D2R35AW;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WebRTCDemo/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) Requires camera access in order to capture and transmit video";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME) Requires microphone access in order to capture and transmit audio";
+				INFOPLIST_KEY_NSCameraUsageDescription = "WebRTCDemo Requires camera access in order to capture and transmit video";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WebRTCDemo Requires microphone access in order to capture and transmit audio";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.omronhealthcare.omronconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.firminiq.chatpoc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "OMRON connect Dev Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -511,31 +524,34 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = UJ8LU8NH7Z;
+				DEVELOPMENT_TEAM = X94D2R35AW;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = X94D2R35AW;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WebRTCDemo/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) Requires camera access in order to capture and transmit video";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "$(PRODUCT_NAME) Requires microphone access in order to capture and transmit audio";
+				INFOPLIST_KEY_NSCameraUsageDescription = "WebRTCDemo Requires camera access in order to capture and transmit video";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WebRTCDemo Requires microphone access in order to capture and transmit audio";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.omronhealthcare.omronconnect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.firminiq.chatpoc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "OMRON connect Dev Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
