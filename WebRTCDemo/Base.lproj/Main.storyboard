@@ -214,7 +214,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="bottomConstraint" destination="PQy-wT-bVn" id="jH3-tc-rCa"/>
                         <outlet property="btnCameraOff" destination="p0R-Zv-T8x" id="v83-HG-1gU"/>
                         <outlet property="btnCameraSwitch" destination="0Wr-Vu-gJT" id="zvA-lJ-wsh"/>
                         <outlet property="btnMute" destination="YVq-9u-09z" id="F4G-uJ-1ry"/>
@@ -222,8 +221,6 @@
                         <outlet property="lblWebRTCStatus" destination="dGc-OC-1RM" id="plj-2F-UGG"/>
                         <outlet property="localView" destination="5be-nU-0bG" id="4Eq-EZ-zTc"/>
                         <outlet property="remoteView" destination="AgR-yJ-Azq" id="Gp8-EO-vFa"/>
-                        <outlet property="rightConstraint" destination="DsY-RK-v6L" id="jty-dX-wuw"/>
-                        <outlet property="topConstraint" destination="qHN-qf-veM" id="tm0-Zd-sO0"/>
                         <outlet property="txtCall" destination="A3v-Tu-XFV" id="2Lt-U4-9JZ"/>
                     </connections>
                 </viewController>

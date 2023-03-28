@@ -7,7 +7,7 @@
 
 import Foundation
 
-let signalingURL = URL(string: "ws://192.168.1.247:3000")!
+let signalingURL = URL(string: "ws://192.168.1.94:3000")!
 let defaultIceServer = ["stun:stun.l.google.com:19302",
                         "stun:stun1.l.google.com:19302",
                         "stun:stun2.l.google.com:19302",

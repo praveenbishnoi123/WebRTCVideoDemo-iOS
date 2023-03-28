@@ -56,6 +56,7 @@ final class WebRTCClient: NSObject {
         config.continualGatheringPolicy = .gatherContinually
         
         // Define media constraints. DtlsSrtpKeyAgreement is required to be true to be able to connect with web browsers.
+        
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
                                               optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueTrue])
         
@@ -74,7 +75,7 @@ final class WebRTCClient: NSObject {
                                              optionalConstraints: nil)
         self.peerConnection.offer(for: constrains) { (sdp, error) in
             guard let sdp = sdp else {
-                debugPrint("errpr sdp===== ",error?.localizedDescription)
+               // debugPrint("errpr sdp===== ",error?.localizedDescription)
                 return
             }
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
@@ -92,7 +93,7 @@ final class WebRTCClient: NSObject {
             }
             
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
-                debugPrint("sdp answer=== ",error?.localizedDescription)
+               // debugPrint("sdp answer=== ",error?.localizedDescription)
                 completion(sdp)
             })
         }
@@ -114,7 +115,6 @@ final class WebRTCClient: NSObject {
         guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else {
             return
         }
-        
         guard
             let frontCamera = (RTCCameraVideoCapturer.captureDevices().first { $0.position == .front }),
             

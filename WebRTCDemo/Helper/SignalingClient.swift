@@ -37,6 +37,7 @@ final class SignalingClient {
         self.webSocket.disconnect()
     }
     func sendData(data:String){
+        debugPrint("data===== ",data)
         self.webSocket.sendString(data: data)
     }
     func send(sdp rtcSdp: RTCSessionDescription) {

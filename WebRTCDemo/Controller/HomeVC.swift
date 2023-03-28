@@ -63,23 +63,8 @@ class HomeVC: UIViewController {
         }
     }
     var isCallPicked = false
-    @IBOutlet weak var topConstraint: NSLayoutConstraint!
-    @IBOutlet weak var rightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var leftConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    
-    struct ResizeRect{
-        var topTouch = false
-        var leftTouch = false
-        var rightTouch = false
-        var bottomTouch = false
-        var middelTouch = false
-    }
-    
-    var touchStart = CGPoint.zero
-    var proxyFactor = CGFloat(10)
-    var resizeRect = ResizeRect()
-   // var views: [AADraggableView]!
+    var viewModel = HomeViewModel()
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         self.signalingConnected = false
@@ -89,11 +74,19 @@ class HomeVC: UIViewController {
         
        // localView.delegate = self
     }
-    func initiateConnection(){
+    func reInitWebrtc(){
         webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
+        self.webRTCClient.delegate = self
+        self.viewModel.webRTCClient = webRTCClient
+    }
+    func initiateConnection(){
         signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
+        webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
+        webRTCClient
         self.webRTCClient.delegate = self
         self.signalClient.delegate = self
+        self.viewModel.webRTCClient = webRTCClient
+        self.viewModel.signalClient = signalClient
         self.signalClient.connect()
     }
     func setUpView(){
@@ -101,8 +94,8 @@ class HomeVC: UIViewController {
         remoteView.isHidden = false
         localRenderer = RTCEAGLVideoView(frame: localView?.frame ?? CGRect.zero)
         remoteRenderer = RTCEAGLVideoView(frame: remoteView.frame)
-        localRenderer.contentMode = .scaleAspectFill
-        remoteRenderer.contentMode = .scaleAspectFill
+        localRenderer.contentMode = .scaleAspectFit
+        remoteRenderer.contentMode = .scaleAspectFit
         self.webRTCClient.startCaptureLocalVideo(renderer: localRenderer)
         self.webRTCClient.renderRemoteVideo(to: remoteRenderer)
         self.isCallPicked = true
@@ -133,10 +126,11 @@ class HomeVC: UIViewController {
     }
     
     @IBAction func onClickCall(_ sender: Any) {
-       // initiateConnection()
+       // self.reInitWebrtc()
         if txtCall.text!.isEmpty{
             AlertHelper.showAlert(controller: self, message: "Please enter name whom you want to call")
         }else{
+            
             let dic : [String:Any?] = ["type" : "start_call", "name":strUserName    , "target":txtCall.text!, "data": nil]
             let strData = AlertHelper.convertJsonToString(dic: dic)
             self.signalClient.sendData(data: strData)
@@ -180,6 +174,9 @@ extension HomeVC: SignalClientDelegate {
                         let strData = AlertHelper.convertJsonToString(dic: dic)
                         self.signalClient.sendData(data: strData)
                     }
+                    DispatchQueue.main.async {
+                        self.goToVideoVC()
+                    }
                 }
             }else if type == "answer_received"{
                 let strSdp = AlertHelper.getStringSafe(str: finalJson["data"])
@@ -187,43 +184,48 @@ extension HomeVC: SignalClientDelegate {
                 self.webRTCClient.set(remoteSdp: remoteSDP) { error in
                     debugPrint("error sdp==== answer",error?.localizedDescription)
                 }
+                DispatchQueue.main.async {
+                    self.goToVideoVC()
+                }
             }else if type == "ice_candidate"{
                 guard let condidateJson = finalJson["data"] as? [String:Any] else {
                     return
                 }
                 let candidate = RTCIceCandidate.init(sdp: AlertHelper.getStringSafe(str: condidateJson["sdpCandidate"]), sdpMLineIndex: Int32(AlertHelper.getStringSafe(str: condidateJson["sdpMLineIndex"])) ?? 0, sdpMid: AlertHelper.getStringSafe(str: condidateJson["sdpMid"]))
+                print("Received remote candidate==")
                 self.webRTCClient.set(remoteCandidate: candidate) {
-                    print("Received remote candidate")
+                    
                    // self.remoteCandidateCount += 1
                 }
                 //self.goToVideoVC()
             }else if type == "call_rejected"{
-                self.removeVideoViews()
+                self.removeVideoViewsOnDisconnectCall()
             }else if type == "call_ended"{
-                self.removeVideoViews()
+                self.removeVideoViewsOnDisconnectCall()
             }
         }
         debugPrint("didReceiveString=== ",json)
     }
     
-    func removeVideoViews(){
+    func removeVideoViewsOnDisconnectCall(){
         DispatchQueue.main.async {
             self.remoteView.isHidden = true
-            self.remoteRenderer.removeFromSuperview()
+            if self.remoteRenderer != nil{
+                self.remoteRenderer.removeFromSuperview()
+            }
             self.remoteRenderer = nil
             self.localRenderer = nil
             self.isCallPicked = false
-            self.webRTCClient.closePeerConnection()
-           // self.webRTCClient = nil
-            self.initiateConnection()
+            self.webRTCClient.peerConnection.close()
+           //self.webRTCClient.delegate = nil
+            self.webRTCClient = nil
+            self.viewModel.webRTCClient = nil
+            self.reInitWebrtc()
         }
     }
     func signalClientDidConnect(_ signalClient: SignalingClient) {
         self.signalingConnected = true
-        let dic : [String:Any?] = ["type" : "store_user", "name":strUserName    , "target":nil, "data": nil]
-        let strData = AlertHelper.convertJsonToString(dic: dic)
-        self.signalClient.sendData(data: strData)
-        
+        viewModel.storeUser(name: strUserName)
     }
     
     func signalClientDidDisconnect(_ signalClient: SignalingClient) {
@@ -256,10 +258,13 @@ extension HomeVC: SignalClientDelegate {
         if !isCallPicked{
             strCall = "reject_call"
         }
-        let dic : [String:Any?] = ["type" : strCall, "name":self.strUserName, "target":self.txtCall.text!, "data": nil]
-        let strData = AlertHelper.convertJsonToString(dic: dic)
-        self.signalClient.sendData(data: strData)
-        self.removeVideoViews()
+        DispatchQueue.main.async { [self] in
+            viewModel.callDisconnect(status: strCall, targetUser: txtCall.text!, sendUser: strUserName) { [weak self] in
+                self?.removeVideoViewsOnDisconnectCall()
+            }
+        }
+        
+        
     }
 }
 
@@ -267,12 +272,8 @@ extension HomeVC: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
         print("discovered local candidate")
-        let condidate:[String : Any] = ["sdpCandidate":candidate.sdp,"sdpMid":candidate.sdpMid!,"sdpMLineIndex":candidate.sdpMLineIndex]
-        DispatchQueue.main.async {
-            let dic : [String:Any?] = ["type" : "ice_candidate", "name":self.strUserName, "target":self.txtCall.text!, "data": condidate]
-           // debugPrint("dict====== ",dic)
-            let strData = AlertHelper.convertJsonToString(dic: dic)
-            self.signalClient.sendData(data: strData)
+        DispatchQueue.main.async { [self] in
+            viewModel.shareIceCandidate(candi: candidate, targetUser: txtCall.text!, sendUser: strUserName)
         }
     }
     
@@ -281,9 +282,9 @@ extension HomeVC: WebRTCClientDelegate {
         switch state {
         case .connected, .completed:
             textColor = .green
-            DispatchQueue.main.async {
-                self.goToVideoVC()
-            }
+//            DispatchQueue.main.async {
+//                self.goToVideoVC()
+//            }
         case .disconnected:
             textColor = .orange
         case .failed, .closed:
