@@ -99,12 +99,17 @@ class HomeVC: UIViewController {
        // localView.delegate = self
     }
     func initiateConnection(){
-        webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
+        initiatePeerConnection()
         signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
-        self.webRTCClient.delegate = self
         self.signalClient.delegate = self
         self.signalClient.connect()
     }
+    
+    func initiatePeerConnection() {
+        webRTCClient = WebRTCClient(iceServers: self.config.webRTCIceServers)
+        self.webRTCClient.delegate = self
+    }
+    
     func setUpView(){
         txtCall.resignFirstResponder()
         remoteView.isHidden = false
@@ -188,13 +193,22 @@ extension HomeVC: SignalClientDelegate {
                         let dic : [String:Any?] = ["type" : "create_answer", "name":self.strUserName, "target":AlertHelper.getStringSafe(str: finalJson["name"]), "data": offer]
                         let strData = AlertHelper.convertJsonToString(dic: dic)
                         self.signalClient.sendData(data: strData)
+                        DispatchQueue.main.async {
+                            self.goToVideoVC()
+                        }
                     }
                 }
             }else if type == "answer_received" {
                 let strSdp = AlertHelper.getStringSafe(str: finalJson["data"])
                 let remoteSDP = RTCSessionDescription(type: .answer, sdp: strSdp)
                 self.webRTCClient.set(remoteSdp: remoteSDP) { error in
-                    debugPrint("error sdp==== answer",error?.localizedDescription)
+                    if error != nil {
+                        debugPrint("error sdp==== answer",error?.localizedDescription)
+                    }else{
+                        DispatchQueue.main.async {
+                            self.goToVideoVC()
+                        }
+                    }
                 }
             }else if type == "ice_candidate" {
                 guard let condidateJson = finalJson["data"] as? [String:Any] else {
@@ -219,13 +233,15 @@ extension HomeVC: SignalClientDelegate {
         DispatchQueue.main.async {
             // self.remoteView.removeFromSuperview()
             self.remoteView.isHidden = true
-            self.remoteRenderer.removeFromSuperview()
-            self.remoteRenderer = nil
+            if self.remoteRenderer != nil {
+                self.remoteRenderer.removeFromSuperview()
+                self.remoteRenderer = nil
+            }
             self.localRenderer = nil
             self.isCallPicked = false
             self.webRTCClient.closePeerConnection()
-           // self.webRTCClient = nil
-            self.initiateConnection()
+            self.initiatePeerConnection()
+           // self.initiateConnection()
         }
     }
     func signalClientDidConnect(_ signalClient: SignalingClient) {
@@ -292,9 +308,9 @@ extension HomeVC: WebRTCClientDelegate {
         switch state {
         case .connected, .completed:
             textColor = .green
-            DispatchQueue.main.async {
-                self.goToVideoVC()
-            }
+//            DispatchQueue.main.async {
+//                self.goToVideoVC()
+//            }
         case .disconnected:
             textColor = .orange
         case .failed, .closed:

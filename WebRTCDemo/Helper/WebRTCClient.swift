@@ -90,13 +90,12 @@ final class WebRTCClient: NSObject {
             guard let sdp = sdp else {
                 return
             }
-            
+        
             self.peerConnection.setLocalDescription(sdp, completionHandler: { (error) in
                 debugPrint("sdp answer=== ",error?.localizedDescription)
                 completion(sdp)
             })
         }
-        
     }
     
     func set(remoteSdp: RTCSessionDescription, completion: @escaping (Error?) -> ()) {
