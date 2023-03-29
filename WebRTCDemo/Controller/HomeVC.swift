@@ -22,11 +22,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var btnCameraOff: UIButton!
     @IBOutlet weak var txtCall: UITextField!
     
-    //    var signalClient: SignalingClient!
-    //    var webRTCClient: WebRTCClient!
     let config = Config.default
     var isSendOffer = false
-    //var strUserName = ""
     
     var localRenderer : RTCEAGLVideoView!
     var remoteRenderer : RTCEAGLVideoView!
@@ -177,41 +174,9 @@ extension HomeVC: SignalClientDelegate {
             if status == "user is not online" {
                 AlertHelper.showAlert(controller: self, message: "User is not online")
             }else if status == "User is ready for call"{
-                
-                //                self.webRTCClient.offer { (sdp) in
-                //                    let offer : [String:Any] = ["type":sdp.type.rawValue,"sdp":sdp.sdp]
-                //                    // AlertHelper.showAlert(controller: self, message: "sdp sent")
-                //                    let dict : [String:Any?] = ["type" : "create_offer", "name":self.strUserName, "target":self.txtCall.text!, "data": offer]
-                //                    let strData = AlertHelper.convertJsonToString(dic: dict)
-                //                    self.signalClient.sendData(data: strData)
-                //
-                //
-                //                }
-                
                 viewModel.createOffer()
                 
             }else if type == "offer_received" {
-//                let strSdp = AlertHelper.getStringSafe(str: responseJson["data"])
-//                let remoteSDP = RTCSessionDescription(type: .offer, sdp: strSdp)
-//                viewModel.webRTCClient.set(remoteSdp: remoteSDP) { error in
-//                    debugPrint("error sdp==== ",error?.localizedDescription)
-//                }
-//                DispatchQueue.main.async {
-//                    self.txtCall.text = AlertHelper.getStringSafe(str: responseJson["name"])
-//                    self.callingView.isHidden = false
-//                }
-//                // strTargetUser = AlertHelper.getStringSafe(str: finalJson["name"])
-//
-//                viewModel.webRTCClient.answer { sdp in
-//                    let offer : [String:Any] = ["type":sdp.type.rawValue,"sdp":sdp.sdp]
-//
-//                    let dict : [String:Any?] = ["type" : "create_answer", "name":self.viewModel.currentUser, "target":AlertHelper.getStringSafe(str: responseJson["name"]), "data": offer]
-//                    let strData = AlertHelper.convertJsonToString(dic: dict)
-//                    self.viewModel.signalClient.sendData(data: strData)
-//                    DispatchQueue.main.async {
-//                        self.goToVideoVC()
-//                    }
-//                }
                 self.response = responseJson
                 DispatchQueue.main.async {
                     let targetUser = AlertHelper.getStringSafe(str: responseJson["name"])
@@ -219,36 +184,13 @@ extension HomeVC: SignalClientDelegate {
                     self.callingView.isHidden = false
                 }
             }else if type == "answer_received" {
-                
                 viewModel.setRemoteSdp(dict: responseJson) {
                     DispatchQueue.main.async {
                         self.goToVideoVC()
                     }
                 }
-//                let strSdp = AlertHelper.getStringSafe(str: responseJson["data"])
-//                let remoteSDP = RTCSessionDescription(type: .answer, sdp: strSdp)
-//                self.viewModel.webRTCClient.set(remoteSdp: remoteSDP) { error in
-//                    if error != nil {
-//                        debugPrint("error sdp==== answer",error?.localizedDescription ?? "")
-//                    }else{
-//                        DispatchQueue.main.async {
-//                            self.goToVideoVC()
-//                        }
-//                    }
-//                }
                 
             }else if type == "ice_candidate" {
-                
-//                guard let condidateJson = responseJson["data"] as? [String:Any] else {
-//                    return
-//                }
-//                let candidate = RTCIceCandidate.init(sdp: AlertHelper.getStringSafe(str: condidateJson["sdpCandidate"]), sdpMLineIndex: Int32(AlertHelper.getStringSafe(str: condidateJson["sdpMLineIndex"])) ?? 0, sdpMid: AlertHelper.getStringSafe(str: condidateJson["sdpMid"]))
-//                print("Received remote candidate==")
-//                self.viewModel.webRTCClient.set(remoteCandidate: candidate) {
-//                    print("Received remote candidate")
-//
-//            }
-                
                 viewModel.setRemoteCandidate(dict: responseJson)
                 
             }else if type == "call_rejected"{
@@ -335,9 +277,6 @@ extension HomeVC: WebRTCClientDelegate {
         switch state {
         case .connected, .completed:
             textColor = .green
-            //            DispatchQueue.main.async {
-            //                self.goToVideoVC()
-            //            }
         case .disconnected:
             textColor = .orange
         case .failed, .closed:
