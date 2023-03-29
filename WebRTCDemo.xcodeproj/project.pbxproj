@@ -96,13 +96,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		841B082D29AE03E400AAD169 /* Camera */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Camera;
-			sourceTree = "<group>";
-		};
 		841B085229AE061D00AAD169 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +173,6 @@
 			children = (
 				84BFCE6529CDB8070079A761 /* Classes */,
 				841B085229AE061D00AAD169 /* Extension */,
-				841B082D29AE03E400AAD169 /* Camera */,
 				84EEA04729A76871009D1298 /* Websocket */,
 				84EEA03B29A5FC7A009D1298 /* Configure.swift */,
 				84EEA04329A76695009D1298 /* SignalingClient.swift */,
@@ -486,10 +478,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X94D2R35AW;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = X94D2R35AW;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = UJ8LU8NH7Z;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -508,10 +500,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.firminiq.chatpoc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.omronhealthcare.omronconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "OMRON connect Dev Profile";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -526,10 +518,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = X94D2R35AW;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = X94D2R35AW;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = UJ8LU8NH7Z;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -548,10 +540,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.firminiq.chatpoc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.omronhealthcare.omronconnect;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "OMRON connect Dev Profile";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

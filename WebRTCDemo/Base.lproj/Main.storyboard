@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="i8z-0G-TZO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="i8z-0G-TZO">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -121,6 +121,25 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AgR-yJ-Azq">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bIU-Q5-XB3">
+                                        <rect key="frame" x="150" y="269" width="20" height="30"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w4K-Ly-e5V">
+                                                <rect key="frame" x="10" y="0.0" width="0.0" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemGray3Color"/>
+                                        <constraints>
+                                            <constraint firstItem="w4K-Ly-e5V" firstAttribute="top" secondItem="bIU-Q5-XB3" secondAttribute="top" id="Ono-5K-Mu0"/>
+                                            <constraint firstItem="w4K-Ly-e5V" firstAttribute="leading" secondItem="bIU-Q5-XB3" secondAttribute="leading" constant="10" id="Xw9-tL-AF3"/>
+                                            <constraint firstAttribute="trailing" secondItem="w4K-Ly-e5V" secondAttribute="trailing" constant="10" id="Z72-Mc-6c8"/>
+                                            <constraint firstAttribute="bottom" secondItem="w4K-Ly-e5V" secondAttribute="bottom" id="cYI-W4-uK7"/>
+                                            <constraint firstAttribute="height" constant="30" id="hhm-fL-a5o"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5be-nU-0bG" customClass="AADraggableView" customModule="WebRTCDemo" customModuleProvider="target">
                                         <rect key="frame" x="184" y="15" width="128" height="155"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -135,7 +154,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="bUv-IC-moo">
-                                        <rect key="frame" x="50" y="508" width="220" height="50"/>
+                                        <rect key="frame" x="7.5" y="508" width="305" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YVq-9u-09z" userLabel="mute">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -149,8 +168,9 @@
                                                     <action selector="onClickMute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7o6-MN-fHj"/>
                                                 </connections>
                                             </button>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p0R-Zv-T8x" userLabel="Speaker">
-                                                <rect key="frame" x="67.5" y="0.0" width="50" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p0R-Zv-T8x" userLabel="Speaker">
+                                                <rect key="frame" x="85" y="0.0" width="50" height="50"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="6jG-W0-Xjy"/>
                                                     <constraint firstAttribute="height" constant="50" id="dI7-rY-K1R"/>
@@ -162,7 +182,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Wr-Vu-gJT" userLabel="camera">
-                                                <rect key="frame" x="85" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="170" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="Woc-kc-X4R"/>
                                                     <constraint firstAttribute="height" constant="50" id="mNq-sX-UTL"/>
@@ -174,7 +194,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST8-sd-8Pe" userLabel="disconnect">
-                                                <rect key="frame" x="170" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="255" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="1vA-Cg-dOw"/>
                                                     <constraint firstAttribute="width" constant="50" id="eGL-jy-SJa"/>
@@ -196,8 +216,10 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="5be-nU-0bG" secondAttribute="trailing" constant="8" id="DsY-RK-v6L"/>
                                     <constraint firstAttribute="bottom" secondItem="bUv-IC-moo" secondAttribute="bottom" constant="10" id="PQy-wT-bVn"/>
+                                    <constraint firstItem="bIU-Q5-XB3" firstAttribute="centerX" secondItem="AgR-yJ-Azq" secondAttribute="centerX" id="lni-be-gU8"/>
                                     <constraint firstItem="5be-nU-0bG" firstAttribute="top" secondItem="AgR-yJ-Azq" secondAttribute="top" constant="15" id="qHN-qf-veM"/>
                                     <constraint firstItem="bUv-IC-moo" firstAttribute="centerX" secondItem="AgR-yJ-Azq" secondAttribute="centerX" id="qYg-Yu-Lz2"/>
+                                    <constraint firstItem="bIU-Q5-XB3" firstAttribute="centerY" secondItem="AgR-yJ-Azq" secondAttribute="centerY" id="sHL-bg-tjM"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -217,11 +239,13 @@
                         <outlet property="btnCameraOff" destination="p0R-Zv-T8x" id="v83-HG-1gU"/>
                         <outlet property="btnCameraSwitch" destination="0Wr-Vu-gJT" id="zvA-lJ-wsh"/>
                         <outlet property="btnMute" destination="YVq-9u-09z" id="F4G-uJ-1ry"/>
+                        <outlet property="lblPauseMute" destination="w4K-Ly-e5V" id="CV1-bR-0Js"/>
                         <outlet property="lblSignalStatus" destination="v5p-4K-pVn" id="cMd-C7-pMD"/>
                         <outlet property="lblWebRTCStatus" destination="dGc-OC-1RM" id="plj-2F-UGG"/>
                         <outlet property="localView" destination="5be-nU-0bG" id="4Eq-EZ-zTc"/>
                         <outlet property="remoteView" destination="AgR-yJ-Azq" id="Gp8-EO-vFa"/>
                         <outlet property="txtCall" destination="A3v-Tu-XFV" id="2Lt-U4-9JZ"/>
+                        <outlet property="viewPauseMute" destination="bIU-Q5-XB3" id="gFv-Qu-dF2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -380,6 +404,9 @@
         <image name="img_unmute" width="100" height="100"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray3Color">
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

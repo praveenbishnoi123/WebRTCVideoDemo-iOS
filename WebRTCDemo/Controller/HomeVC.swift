@@ -9,6 +9,7 @@ import UIKit
 import WebRTC
 import AVKit
 
+
 class HomeVC: UIViewController {
 
     @IBOutlet weak var lblSignalStatus: UILabel!
@@ -18,11 +19,6 @@ class HomeVC: UIViewController {
     let config = Config.default
     var isSendOffer = false
     var strUserName = ""
-    
-   //c var pip : AVPictureInPictureController?
-    
-    //let pipVideoCallViewController = AVPictureInPictureVideoCallViewController()
-
     
     @IBOutlet weak var txtCall: UITextField!
     private var signalingConnected: Bool = false {
@@ -46,8 +42,10 @@ class HomeVC: UIViewController {
     @IBOutlet weak var customViewHeight: NSLayoutConstraint!
     @IBOutlet weak var btnMute: UIButton!
     
+    @IBOutlet weak var viewPauseMute: UIView!
     @IBOutlet weak var btnCameraSwitch: UIButton!
     
+    @IBOutlet weak var lblPauseMute: UILabel!
     @IBOutlet weak var btnCameraOff: UIButton!
     var isMuteAudio:Bool = false{
         didSet{
@@ -69,21 +67,48 @@ class HomeVC: UIViewController {
             }
         }
     }
+    var isPauseVideo:Bool = true{
+        didSet{
+            if isPauseVideo{
+                viewPauseMute.isHidden = false
+                lblPauseMute.text = "Video Paused"
+            }else{
+                lblPauseMute.text = ""
+                viewPauseMute.isHidden = true
+            }
+        }
+    }
+    var isMuteVideo:Bool = true{
+        didSet{
+            if isMuteVideo{
+                viewPauseMute.isHidden = false
+                lblPauseMute.text = "Mute"
+            }else{
+                lblPauseMute.text = ""
+                viewPauseMute.isHidden = true
+            }
+        }
+    }
     var isCallPicked = false
     var viewModel = HomeViewModel()
-   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("isVideoEnable \(Helper.checkifVideoEnable())")
         self.signalingConnected = false
+        viewPauseMute.layer.cornerRadius = 10
+        isMuteVideo = false
+        isPauseVideo = false
         initiateConnection()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         
        // localView.delegate = self
     }
-   
+    
     func initiateConnection() {
         initiatePeerConnection()
         signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
@@ -115,10 +140,10 @@ class HomeVC: UIViewController {
         localView.reposition = .edgesOnly
         localView.respectedView = remoteView
         self.localRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        
         self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
         self.remoteView.sendSubviewToBack(remoteRenderer)
+        
     }
     private func embedView(_ view: UIView, into containerView: UIView) {
         containerView.addSubview(view)
@@ -215,6 +240,12 @@ extension HomeVC: SignalClientDelegate {
                 self.removeVideoViewsOnDisconnectCall()
             }else if type == "call_ended"{
                 self.removeVideoViewsOnDisconnectCall()
+            }else if type == "video_paused"{
+                if let videoStatus = finalJson["data"] as? Bool{
+                    DispatchQueue.main.async {
+                        self.isPauseVideo = !videoStatus
+                    }
+                }
             }
         }
         debugPrint("didReceiveString=== ",json)
@@ -234,6 +265,7 @@ extension HomeVC: SignalClientDelegate {
             self.webRTCClient = nil
             self.viewModel.webRTCClient = nil
             self.initiatePeerConnection()
+            
         }
     }
     func signalClientDidConnect(_ signalClient: SignalingClient) {
@@ -262,6 +294,9 @@ extension HomeVC: SignalClientDelegate {
     }
     @IBAction func onClickCameraOff(_ sender: Any) {
         isShowVideo = !isShowVideo
+        let dic : [String:Any?] = ["type" : "video_pause", "name":strUserName,"target":txtCall.text!, "data": isShowVideo]
+        let strData = AlertHelper.convertJsonToString(dic: dic)
+        self.signalClient.sendData(data: strData)
     }
     @IBAction func onClickCameraSwitch(_ sender: Any) {
         self.webRTCClient.switchCameraPosition()
@@ -281,7 +316,11 @@ extension HomeVC: SignalClientDelegate {
     }
 }
 
-
+extension HomeVC:AVPictureInPictureControllerDelegate{
+    func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        debugPrint("start picture======")
+    }
+}
 extension HomeVC: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
