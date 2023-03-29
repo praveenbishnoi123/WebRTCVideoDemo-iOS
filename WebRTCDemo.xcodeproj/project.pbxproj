@@ -96,13 +96,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		841B082D29AE03E400AAD169 /* Camera */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Camera;
-			sourceTree = "<group>";
-		};
 		841B085229AE061D00AAD169 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,7 +173,6 @@
 			children = (
 				84BFCE6529CDB8070079A761 /* Classes */,
 				841B085229AE061D00AAD169 /* Extension */,
-				841B082D29AE03E400AAD169 /* Camera */,
 				84EEA04729A76871009D1298 /* Websocket */,
 				84EEA03B29A5FC7A009D1298 /* Configure.swift */,
 				84EEA04329A76695009D1298 /* SignalingClient.swift */,
