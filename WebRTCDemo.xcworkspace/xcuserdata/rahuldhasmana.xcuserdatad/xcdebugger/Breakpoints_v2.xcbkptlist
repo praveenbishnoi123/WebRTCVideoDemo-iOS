@@ -7,32 +7,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "26C2CBDB-1232-4620-88A9-C349EFE37D6B"
+            uuid = "C575AF17-A3D3-45E3-BF9D-0CEB7D2DEB52"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WebRTCDemo/Controller/HomeVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "didPressAccept(_:)"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "signalClientReceiveString(_:didReceiveString:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5C0B14EF-6577-4348-9CCA-8FF808893055"
+            uuid = "39CF6F40-54C6-47C9-BF5E-4B92C4EB27F1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WebRTCDemo/Controller/HomeVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
-            landmarkName = "removeVideoViewsOnDisconnectCall()"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
+            landmarkName = "signalClientReceiveString(_:didReceiveString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "96A88D1C-0D82-4F29-9547-9396184B4BE4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WebRTCDemo/ViewModel/HomeViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "shareIceCandidate(candi:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

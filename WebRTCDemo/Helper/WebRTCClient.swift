@@ -202,7 +202,7 @@ final class WebRTCClient: NSObject {
     }
     
     func sendNewData(_ string:String){
-        
+
     }
     
     func sendData(_ data: Data) {

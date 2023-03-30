@@ -33,8 +33,6 @@ class HomeVC: UIViewController {
     var isCallPicked = false
     var viewModel = HomeViewModel()
     var response : [String:Any] = [:]
-    var isCallPicked = false
-    var viewModel = HomeViewModel()
 
     
     private var signalingConnected: Bool = false {
@@ -114,10 +112,8 @@ class HomeVC: UIViewController {
     }
     
     func initiateConnection() {
-
-        initiatePeerConnection()
-        signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
-        self.signalClient.delegate = self
+        self.initiatePeerConnection()
+        let signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
         self.viewModel.signalClient = signalClient
         self.viewModel.signalClient.delegate = self
         self.viewModel.signalClient.connect()
@@ -139,26 +135,12 @@ class HomeVC: UIViewController {
         self.remoteRenderer.contentMode = .scaleAspectFit
         viewModel.webRTCClient.startCaptureLocalVideo(renderer: localRenderer)
         viewModel.webRTCClient.renderRemoteVideo(to: remoteRenderer)
-    }
-    
-    func setUpView(){
-        txtCall.resignFirstResponder()
-        remoteView.isHidden = false
-        localRenderer = RTCEAGLVideoView(frame: localView?.frame ?? CGRect.zero)
-        remoteRenderer = RTCEAGLVideoView(frame: remoteView.frame)
-        localRenderer.contentMode = .scaleAspectFit
-        remoteRenderer.contentMode = .scaleAspectFit
-        viewModel.webRTCClient.startCaptureLocalVideo(renderer: localRenderer)
-        viewModel.webRTCClient.renderRemoteVideo(to: remoteRenderer)
-        
         self.isCallPicked = true
         if let localVideoView = self.localView {
             self.embedView(localRenderer, into: localVideoView)
         }
         self.localView.reposition = .edgesOnly
-        self.localView.respectedView = remoteView
-        localView.reposition = .edgesOnly
-        localView.respectedView = remoteView
+        //self.localView.respectedView = remoteView
         self.localRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
@@ -217,7 +199,7 @@ extension HomeVC: SignalClientDelegate {
     func signalClientReceiveString(_ signalClient: SignalingClient, didReceiveString data: String) {
       
         if let responseJson = AlertHelper.convertToJson(text: data) {
-            
+            print("responseJson \(responseJson)")
             let type = AlertHelper.getStringSafe(str: responseJson["type"])
             let status = AlertHelper.getStringSafe(str: responseJson["data"])
             if status == "user is not online" {
@@ -227,8 +209,9 @@ extension HomeVC: SignalClientDelegate {
                 
             }else if type == "offer_received" {
                 self.response = responseJson
+                let targetUser = AlertHelper.getStringSafe(str: responseJson["name"])
+                viewModel.targetUser = targetUser
                 DispatchQueue.main.async {
-                    let targetUser = AlertHelper.getStringSafe(str: responseJson["name"])
                     self.callingLbl.text = "\(targetUser) is calling you"
                     self.callingView.isHidden = false
                 }
@@ -238,16 +221,14 @@ extension HomeVC: SignalClientDelegate {
                         self.goToVideoVC()
                     }
                 }
-                
             }else if type == "ice_candidate" {
                 viewModel.setRemoteCandidate(dict: responseJson)
-                
             }else if type == "call_rejected"{
                 self.removeVideoViewsOnDisconnectCall()
             }else if type == "call_ended"{
                 self.removeVideoViewsOnDisconnectCall()
             }else if type == "video_paused"{
-                if let videoStatus = finalJson["data"] as? Bool{
+                if let videoStatus = responseJson["data"] as? Bool{
                     DispatchQueue.main.async {
                         self.isPauseVideo = !videoStatus
                     }
@@ -267,7 +248,7 @@ extension HomeVC: SignalClientDelegate {
             }
             self.localRenderer = nil
             self.isCallPicked = false
-            self.webRTCClient.peerConnection.close()
+            self.viewModel.webRTCClient.peerConnection.close()
             self.viewModel.webRTCClient = nil
             self.initiatePeerConnection()
         }
@@ -299,9 +280,10 @@ extension HomeVC: SignalClientDelegate {
     
     @IBAction func onClickCameraOff(_ sender: Any) {
         isShowVideo = !isShowVideo
-        let dic : [String:Any?] = ["type" : "video_pause", "name":strUserName,"target":txtCall.text!, "data": isShowVideo]
-        let strData = AlertHelper.convertJsonToString(dic: dic)
-        self.signalClient.sendData(data: strData)
+        viewModel.videoPause(isShowVideo:isShowVideo)
+//        let dic : [String:Any?] = ["type" : "video_pause", "name":viewModel.currentUser,"target":viewModel.targetUser, "data": isShowVideo]
+//        let strData = AlertHelper.convertJsonToString(dic: dic)
+//        viewModel.signalClient.sendData(data: strData)
     }
     
     @IBAction func onClickCameraSwitch(_ sender: Any) {

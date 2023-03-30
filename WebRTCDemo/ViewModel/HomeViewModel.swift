@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import WebRTC<!--HomeV
+import WebRTC
 
 class HomeViewModel {
  
@@ -18,13 +18,15 @@ class HomeViewModel {
         
     // Use this method for store user
     func storeUser(){
-        let dic : [String:Any?] = ["type" : "store_user", "name":currentUser, "target":nil, "data": nil]
-        callDataToServer(data: dic)
+        let dict : [String:Any?] = ["type" : "store_user", "name":currentUser, "target":nil, "data": nil]
+        print("dict \(dict)")
+        callDataToServer(data: dict)
     }
     
     func startCall() {
-        let data : [String:Any?] = ["type" : "start_call", "name":currentUser, "target":targetUser, "data": nil]
-        let strData = AlertHelper.convertJsonToString(dic: data)
+        let dict : [String:Any?] = ["type" : "start_call", "name":currentUser, "target":targetUser, "data": nil]
+        print("dict \(dict)")
+        let strData = AlertHelper.convertJsonToString(dic: dict)
         self.signalClient.sendData(data: strData)
     }
     
@@ -33,6 +35,7 @@ class HomeViewModel {
             let offer : [String:Any] = ["type":sdp.type.rawValue,"sdp":sdp.sdp]
             // AlertHelper.showAlert(controller: self, message: "sdp sent")
             let dict : [String:Any?] = ["type" : "create_offer", "name": self.currentUser, "target": self.targetUser, "data": offer]
+            print("dict \(dict)")
             self.callDataToServer(data: dict)
         }
     }
@@ -47,6 +50,7 @@ class HomeViewModel {
                     let offer : [String:Any] = ["type":sdp.type.rawValue,"sdp":sdp.sdp]
                     
                     let dict : [String:Any?] = ["type" : "create_answer", "name":self.currentUser, "target":AlertHelper.getStringSafe(str: dict["name"]), "data": offer]
+                    print("dict \(dict)")
                     let strData = AlertHelper.convertJsonToString(dic: dict)
                     self.signalClient.sendData(data: strData)
                     completion()
@@ -86,6 +90,7 @@ class HomeViewModel {
         let condidate:[String : Any] = ["sdpCandidate":candi.sdp,"sdpMid":candi.sdpMid!,"sdpMLineIndex":candi.sdpMLineIndex]
         DispatchQueue.main.async {
             let dict : [String:Any?] = ["type" : "ice_candidate", "name":self.currentUser, "target":self.targetUser, "data": condidate]
+            print("dict \(dict)")
             self.callDataToServer(data: dict)
         }
     }
@@ -93,6 +98,7 @@ class HomeViewModel {
     // Use this method for call disconnect
     func callDisconnect(status:String, completion : @escaping ()-> Void){
         let dict : [String:Any?] = ["type" : status, "name":currentUser, "target":targetUser, "data": nil]
+        print("dict \(dict)")
         self.callDataToServer(data: dict)
         completion()
     }
@@ -100,6 +106,13 @@ class HomeViewModel {
     // Common method for data send to server
     func callDataToServer(data:[String:Any?]) {
         let strData = AlertHelper.convertJsonToString(dic: data)
+        self.signalClient.sendData(data: strData)
+    }
+    
+    func videoPause(isShowVideo:Bool) {
+        let dict : [String:Any?] = ["type" : "video_pause", "name":currentUser,"target":targetUser, "data": isShowVideo]
+        print("dict \(dict)")
+        let strData = AlertHelper.convertJsonToString(dic: dict)
         self.signalClient.sendData(data: strData)
     }
 }

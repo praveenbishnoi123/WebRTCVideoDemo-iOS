@@ -187,7 +187,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="bUv-IC-moo">
-                                        <rect key="frame" x="50" y="508" width="220" height="50"/>
+                                        <rect key="frame" x="7.5" y="508" width="305" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YVq-9u-09z" userLabel="mute">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -201,8 +201,8 @@
                                                     <action selector="onClickMute:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7o6-MN-fHj"/>
                                                 </connections>
                                             </button>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p0R-Zv-T8x" userLabel="Speaker">
-                                                <rect key="frame" x="67.5" y="0.0" width="50" height="50"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p0R-Zv-T8x" userLabel="Speaker">
+                                                <rect key="frame" x="85" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="6jG-W0-Xjy"/>
                                                     <constraint firstAttribute="height" constant="50" id="dI7-rY-K1R"/>
@@ -214,7 +214,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Wr-Vu-gJT" userLabel="camera">
-                                                <rect key="frame" x="85" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="170" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="Woc-kc-X4R"/>
                                                     <constraint firstAttribute="height" constant="50" id="mNq-sX-UTL"/>
@@ -226,7 +226,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST8-sd-8Pe" userLabel="disconnect">
-                                                <rect key="frame" x="170" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="255" y="0.0" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="1vA-Cg-dOw"/>
                                                     <constraint firstAttribute="width" constant="50" id="eGL-jy-SJa"/>
