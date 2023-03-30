@@ -23,7 +23,7 @@ class UserLoginVC: UIViewController {
         }else{
            // if #available(iOS 15.0, *) {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
-                vc.strUserName = self.txtUserName.text!
+                vc.viewModel.currentUser = self.txtUserName.text!
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true)
 //            } else {
