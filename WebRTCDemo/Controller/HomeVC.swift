@@ -21,16 +21,21 @@ class HomeVC: UIViewController {
     @IBOutlet weak var btnCameraSwitch: UIButton!
     @IBOutlet weak var btnCameraOff: UIButton!
     @IBOutlet weak var txtCall: UITextField!
+    @IBOutlet weak var viewPauseMute: UIView!
+    @IBOutlet weak var lblPauseMute: UILabel!
     
     let config = Config.default
     var isSendOffer = false
-    
+
     var localRenderer : RTCEAGLVideoView!
     var remoteRenderer : RTCEAGLVideoView!
     
     var isCallPicked = false
     var viewModel = HomeViewModel()
     var response : [String:Any] = [:]
+    var isCallPicked = false
+    var viewModel = HomeViewModel()
+
     
     private var signalingConnected: Bool = false {
         didSet {
@@ -46,7 +51,7 @@ class HomeVC: UIViewController {
             }
         }
     }
-    
+
     var isMuteAudio:Bool = false{
         didSet{
             if isMuteAudio{
@@ -68,11 +73,39 @@ class HomeVC: UIViewController {
         }
     }
     
+    var isPauseVideo:Bool = true{
+        didSet{
+            if isPauseVideo{
+                viewPauseMute.isHidden = false
+                lblPauseMute.text = "Video Paused"
+            }else{
+                lblPauseMute.text = ""
+                viewPauseMute.isHidden = true
+            }
+        }
+    }
+    var isMuteVideo:Bool = true{
+        didSet{
+            if isMuteVideo{
+                viewPauseMute.isHidden = false
+                lblPauseMute.text = "Mute"
+            }else{
+                lblPauseMute.text = ""
+                viewPauseMute.isHidden = true
+            }
+        }
+    }
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.signalingConnected = false
+ 
         self.callingView.isHidden = true
+        print("isVideoEnable \(Helper.checkifVideoEnable())")
+        self.signalingConnected = false
+        viewPauseMute.layer.cornerRadius = 10
+        isMuteVideo = false
+        isPauseVideo = false
         initiateConnection()
     }
     
@@ -81,8 +114,10 @@ class HomeVC: UIViewController {
     }
     
     func initiateConnection() {
-        self.initiatePeerConnection()
-        let signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
+
+        initiatePeerConnection()
+        signalClient = SignalingClient(webSocket: NativeWebSocket(url: self.config.signalingServerUrl))
+        self.signalClient.delegate = self
         self.viewModel.signalClient = signalClient
         self.viewModel.signalClient.delegate = self
         self.viewModel.signalClient.connect()
@@ -104,12 +139,26 @@ class HomeVC: UIViewController {
         self.remoteRenderer.contentMode = .scaleAspectFit
         viewModel.webRTCClient.startCaptureLocalVideo(renderer: localRenderer)
         viewModel.webRTCClient.renderRemoteVideo(to: remoteRenderer)
+    }
+    
+    func setUpView(){
+        txtCall.resignFirstResponder()
+        remoteView.isHidden = false
+        localRenderer = RTCEAGLVideoView(frame: localView?.frame ?? CGRect.zero)
+        remoteRenderer = RTCEAGLVideoView(frame: remoteView.frame)
+        localRenderer.contentMode = .scaleAspectFit
+        remoteRenderer.contentMode = .scaleAspectFit
+        viewModel.webRTCClient.startCaptureLocalVideo(renderer: localRenderer)
+        viewModel.webRTCClient.renderRemoteVideo(to: remoteRenderer)
+        
         self.isCallPicked = true
         if let localVideoView = self.localView {
             self.embedView(localRenderer, into: localVideoView)
         }
         self.localView.reposition = .edgesOnly
         self.localView.respectedView = remoteView
+        localView.reposition = .edgesOnly
+        localView.respectedView = remoteView
         self.localRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
@@ -197,14 +246,20 @@ extension HomeVC: SignalClientDelegate {
                 self.removeVideoViewsOnDisconnectCall()
             }else if type == "call_ended"{
                 self.removeVideoViewsOnDisconnectCall()
+            }else if type == "video_paused"{
+                if let videoStatus = finalJson["data"] as? Bool{
+                    DispatchQueue.main.async {
+                        self.isPauseVideo = !videoStatus
+                    }
+                }
             }
             debugPrint("didReceiveString=== ",responseJson)
         }
-       
     }
     
     func removeVideoViewsOnDisconnectCall() {
         DispatchQueue.main.async {
+            // self.remoteView.removeFromSuperview()
             self.remoteView.isHidden = true
             if self.remoteRenderer != nil {
                 self.remoteRenderer.removeFromSuperview()
@@ -212,7 +267,7 @@ extension HomeVC: SignalClientDelegate {
             }
             self.localRenderer = nil
             self.isCallPicked = false
-            self.viewModel.webRTCClient.peerConnection.close()
+            self.webRTCClient.peerConnection.close()
             self.viewModel.webRTCClient = nil
             self.initiatePeerConnection()
         }
@@ -244,6 +299,9 @@ extension HomeVC: SignalClientDelegate {
     
     @IBAction func onClickCameraOff(_ sender: Any) {
         isShowVideo = !isShowVideo
+        let dic : [String:Any?] = ["type" : "video_pause", "name":strUserName,"target":txtCall.text!, "data": isShowVideo]
+        let strData = AlertHelper.convertJsonToString(dic: dic)
+        self.signalClient.sendData(data: strData)
     }
     
     @IBAction func onClickCameraSwitch(_ sender: Any) {
@@ -263,6 +321,11 @@ extension HomeVC: SignalClientDelegate {
     }
 }
 
+extension HomeVC:AVPictureInPictureControllerDelegate{
+    func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        debugPrint("start picture======")
+    }
+}
 extension HomeVC: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
@@ -290,5 +353,15 @@ extension HomeVC: WebRTCClientDelegate {
             self.lblWebRTCStatus?.text = state.description.capitalized
             self.lblWebRTCStatus?.textColor = textColor
         }
+    }
+}
+
+class SampleBufferVideoCallView: UIView {
+    override class var layerClass: AnyClass {
+        AVSampleBufferDisplayLayer.self
+    }
+    
+    var sampleBufferDisplayLayer: AVSampleBufferDisplayLayer {
+        layer as! AVSampleBufferDisplayLayer
     }
 }

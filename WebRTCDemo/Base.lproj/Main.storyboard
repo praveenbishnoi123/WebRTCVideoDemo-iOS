@@ -151,9 +151,28 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AgR-yJ-Azq">
-                                <rect key="frame" x="339" y="0.0" width="320" height="568"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AgR-yJ-Azq">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wAV-pj-gYU">
+                                        <rect key="frame" x="150" y="269" width="20" height="30"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="THz-Fl-90F">
+                                                <rect key="frame" x="10" y="0.0" width="0.0" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemGray3Color"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="THz-Fl-90F" secondAttribute="trailing" constant="10" id="3kU-d1-GQg"/>
+                                            <constraint firstAttribute="height" constant="30" id="EA2-Fh-Do1"/>
+                                            <constraint firstItem="THz-Fl-90F" firstAttribute="leading" secondItem="wAV-pj-gYU" secondAttribute="leading" constant="10" id="Eo8-jO-292"/>
+                                            <constraint firstAttribute="bottom" secondItem="THz-Fl-90F" secondAttribute="bottom" id="sQG-bl-Mco"/>
+                                            <constraint firstItem="THz-Fl-90F" firstAttribute="top" secondItem="wAV-pj-gYU" secondAttribute="top" id="tpr-bX-mfh"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5be-nU-0bG" customClass="AADraggableView" customModule="WebRTCDemo" customModuleProvider="target">
                                         <rect key="frame" x="184" y="15" width="128" height="155"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -227,8 +246,10 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="wAV-pj-gYU" firstAttribute="centerX" secondItem="AgR-yJ-Azq" secondAttribute="centerX" id="BmT-Nb-BX6"/>
                                     <constraint firstAttribute="trailing" secondItem="5be-nU-0bG" secondAttribute="trailing" constant="8" id="DsY-RK-v6L"/>
                                     <constraint firstAttribute="bottom" secondItem="bUv-IC-moo" secondAttribute="bottom" constant="10" id="PQy-wT-bVn"/>
+                                    <constraint firstItem="wAV-pj-gYU" firstAttribute="centerY" secondItem="AgR-yJ-Azq" secondAttribute="centerY" id="Xz6-HA-S21"/>
                                     <constraint firstItem="5be-nU-0bG" firstAttribute="top" secondItem="AgR-yJ-Azq" secondAttribute="top" constant="15" id="qHN-qf-veM"/>
                                     <constraint firstItem="bUv-IC-moo" firstAttribute="centerX" secondItem="AgR-yJ-Azq" secondAttribute="centerX" id="qYg-Yu-Lz2"/>
                                 </constraints>
@@ -252,11 +273,13 @@
                         <outlet property="btnMute" destination="YVq-9u-09z" id="F4G-uJ-1ry"/>
                         <outlet property="callingLbl" destination="k7T-NJ-c0V" id="tGz-yl-cKp"/>
                         <outlet property="callingView" destination="Wzy-nt-HYB" id="c1m-xr-9Eq"/>
+                        <outlet property="lblPauseMute" destination="THz-Fl-90F" id="1qe-eJ-oIs"/>
                         <outlet property="lblSignalStatus" destination="v5p-4K-pVn" id="cMd-C7-pMD"/>
                         <outlet property="lblWebRTCStatus" destination="dGc-OC-1RM" id="plj-2F-UGG"/>
                         <outlet property="localView" destination="5be-nU-0bG" id="4Eq-EZ-zTc"/>
                         <outlet property="remoteView" destination="AgR-yJ-Azq" id="Gp8-EO-vFa"/>
                         <outlet property="txtCall" destination="A3v-Tu-XFV" id="2Lt-U4-9JZ"/>
+                        <outlet property="viewPauseMute" destination="wAV-pj-gYU" id="3C7-Rt-z09"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -416,6 +439,9 @@
         <image name="img_unmute" width="100" height="100"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray3Color">
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
