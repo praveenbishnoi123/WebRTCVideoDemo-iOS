@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import WebRTC<!--HomeV
+import WebRTC
 
 class HomeViewModel {
  
@@ -100,6 +100,20 @@ class HomeViewModel {
     // Common method for data send to server
     func callDataToServer(data:[String:Any?]) {
         let strData = AlertHelper.convertJsonToString(dic: data)
+        self.signalClient.sendData(data: strData)
+    }
+    
+    // Use this method for camera off/video paused
+    func videoPause(isShowVideo:Bool) {
+        let dic : [String:Any?] = ["type" : "video_pause", "name":currentUser,"target":targetUser, "data": isShowVideo]
+        let strData = AlertHelper.convertJsonToString(dic: dic)
+        self.signalClient.sendData(data: strData)
+    }
+    
+    // Use this method for mute audio
+    func audioMute(isMute:Bool) {
+        let dic : [String:Any?] = ["type" : "audio_mute", "name":currentUser,"target":targetUser, "data": isMute]
+        let strData = AlertHelper.convertJsonToString(dic: dic)
         self.signalClient.sendData(data: strData)
     }
 }
