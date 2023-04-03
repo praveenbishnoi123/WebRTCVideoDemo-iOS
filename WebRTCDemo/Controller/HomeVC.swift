@@ -99,12 +99,9 @@ class HomeVC: UIViewController {
     }
     var isToggleView:Bool = false{
         didSet{
-            DispatchQueue.main.async {
-                self.setupToggleView()
-            }
+            self.setupToggleView()
         }
     }
-   // @IBOutlet weak var videoParentView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,7 +125,6 @@ class HomeVC: UIViewController {
         self.viewModel.signalClient = signalClient
         self.viewModel.signalClient.delegate = self
         self.viewModel.signalClient.connect()
-        //self.signalClient.connect()
     }
     
     func initiatePeerConnection() {
@@ -137,11 +133,8 @@ class HomeVC: UIViewController {
         self.viewModel.webRTCClient.delegate = self
     }
     
-
-    
     func setUpView() {
         self.txtCall.resignFirstResponder()
-       // self.remoteView.isHidden = false
         self.videoView.isHidden = false
         self.localRenderer = RTCEAGLVideoView(frame: localView?.frame ?? CGRect.zero)
         self.remoteRenderer = RTCEAGLVideoView(frame: remoteView.frame)
@@ -165,8 +158,6 @@ class HomeVC: UIViewController {
 
     func setupToggleView(){
         if isToggleView{
-            localRenderer.frame = remoteView.frame
-            remoteRenderer.frame = localView.frame
             if let localVideoView = self.remoteView {
                 self.embedView(localRenderer, into: localVideoView)
             }
@@ -174,8 +165,6 @@ class HomeVC: UIViewController {
                 self.embedView(remoteRenderer, into: localVideoView)
             }
         }else{
-            localRenderer.frame = remoteView.frame
-            remoteRenderer.frame = localView.frame
             if let localVideoView = self.localView {
                 self.embedView(localRenderer, into: localVideoView)
             }
@@ -278,9 +267,7 @@ extension HomeVC: SignalClientDelegate {
                     }
                 }
             }else if type == "audio_muted"{
-
                 if let videoStatus = responseJson["data"] as? Bool{
-
                     DispatchQueue.main.async {
                         self.isMuteAudioOtherUser = videoStatus
                     }
@@ -292,8 +279,6 @@ extension HomeVC: SignalClientDelegate {
     
     func removeVideoViewsOnDisconnectCall() {
         DispatchQueue.main.async {
-            // self.remoteView.removeFromSuperview()
-           // self.remoteView.isHidden = true
             self.videoView.isHidden = true
 
             if self.remoteRenderer != nil {
@@ -306,6 +291,7 @@ extension HomeVC: SignalClientDelegate {
             self.viewModel.targetUser = ""
             self.localRenderer = nil
             self.isCallPicked = false
+            self.remoteView.subviews.forEach({ $0.removeFromSuperview() })
             self.viewModel.webRTCClient.peerConnection.close()
             self.viewModel.webRTCClient = nil
             self.initiatePeerConnection()
@@ -360,11 +346,6 @@ extension HomeVC: SignalClientDelegate {
     }
 }
 
-extension HomeVC:AVPictureInPictureControllerDelegate{
-    func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        debugPrint("start picture======")
-    }
-}
 extension HomeVC: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
@@ -392,15 +373,5 @@ extension HomeVC: WebRTCClientDelegate {
             self.lblWebRTCStatus?.text = state.description.capitalized
             self.lblWebRTCStatus?.textColor = textColor
         }
-    }
-}
-
-class SampleBufferVideoCallView: UIView {
-    override class var layerClass: AnyClass {
-        AVSampleBufferDisplayLayer.self
-    }
-    
-    var sampleBufferDisplayLayer: AVSampleBufferDisplayLayer {
-        layer as! AVSampleBufferDisplayLayer
     }
 }

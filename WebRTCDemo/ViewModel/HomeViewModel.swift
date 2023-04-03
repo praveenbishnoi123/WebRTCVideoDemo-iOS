@@ -123,18 +123,4 @@ class HomeViewModel {
         let strData = Helper.convertJsonToString(dic: dic)
         self.signalClient.sendData(data: strData)
     }
-    
-    // Use this method for camera off/video paused
-    func videoPause(isShowVideo:Bool) {
-        let dic : [String:Any?] = ["type" : "video_pause", "name":currentUser,"target":targetUser, "data": isShowVideo]
-        let strData = AlertHelper.convertJsonToString(dic: dic)
-        self.signalClient.sendData(data: strData)
-    }
-    
-    // Use this method for mute audio
-    func audioMute(isMute:Bool) {
-        let dic : [String:Any?] = ["type" : "audio_mute", "name":currentUser,"target":targetUser, "data": isMute]
-        let strData = AlertHelper.convertJsonToString(dic: dic)
-        self.signalClient.sendData(data: strData)
-    }
 }
