@@ -25,6 +25,7 @@ class HomeVC: UIViewController {
     @IBOutlet weak var viewPauseMute: UIView!
     @IBOutlet weak var lblPauseMute: UILabel!
     
+    @IBOutlet weak var btnToggleView: UIButton!
     let config = Config.default
     var isSendOffer = false
 
@@ -34,6 +35,11 @@ class HomeVC: UIViewController {
     var isCallPicked = false
     var isToggelView = false
     var viewModel = HomeViewModel()
+    @IBOutlet weak var localViewWidthCons: NSLayoutConstraint!
+    @IBOutlet weak var localViewHeightCons: NSLayoutConstraint!
+    
+    @IBOutlet weak var remoteViewWidthCons: NSLayoutConstraint!
+    @IBOutlet weak var remoteViewHeightCons: NSLayoutConstraint!
     var response : [String:Any] = [:]
 
     
@@ -84,18 +90,7 @@ class HomeVC: UIViewController {
             }
         }
     }
-//    var isMuteVideo:Bool = true {
-//        didSet{
-//            if isMuteVideo{
-//                viewPauseMute.isHidden = false
-//                lblPauseMute.text = "Mute"
-//            }else{
-//                lblPauseMute.text = ""
-//                viewPauseMute.isHidden = true
-//            }
-//        }
-//    }
-    
+
     var isMuteAudioOtherUser:Bool = false{
         didSet{
             if isMuteAudioOtherUser{
@@ -107,7 +102,14 @@ class HomeVC: UIViewController {
             }
         }
     }
-   
+    var isToggleView:Bool = false{
+        didSet{
+            DispatchQueue.main.async {
+                self.setupToggleView()
+            }
+        }
+    }
+   // @IBOutlet weak var videoParentView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,7 +118,7 @@ class HomeVC: UIViewController {
         print("isVideoEnable \(Helper.checkifVideoEnable())")
         self.signalingConnected = false
         viewPauseMute.layer.cornerRadius = 10
-        //isMuteVideo = false
+        isMuteAudioOtherUser = false
         isPauseVideo = false
         initiateConnection()
     }
@@ -140,25 +142,7 @@ class HomeVC: UIViewController {
         self.viewModel.webRTCClient.delegate = self
     }
     
-    override func viewDidLayoutSubviews() {
-        if isToggelView {
-            DispatchQueue.main.async {
-                if self.localRenderer != nil {
-                    self.localRenderer.frame = self.remoteView.frame
-                }
-               
-            }
-           
-        }else{
-            DispatchQueue.main.async {
-                if self.remoteRenderer != nil {
-                    self.remoteRenderer.frame = self.localView.frame
-                }
-               
-            }
-          
-        }
-    }
+
     
     func setUpView() {
         self.txtCall.resignFirstResponder()
@@ -180,38 +164,32 @@ class HomeVC: UIViewController {
         self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
         self.remoteView.sendSubviewToBack(remoteRenderer)
+        self.localView.addSubview(btnToggleView)
     }
     
-//    func switchView() {
-//        if isToggelView {
-//
-//            if let localVideoView = self.localView {
-//                localRenderer.frame = localVideoView.frame
-//                self.embedView(localRenderer, into: localVideoView)
-//            }
-//           // remoteRenderer.frame = remoteView.frame
-//            self.embedView(remoteRenderer, into: self.remoteView)
-//            self.remoteView.sendSubviewToBack(remoteRenderer)
-//        }else{
-//
-//            if let remoteVideoView = self.remoteView {
-//                //localRenderer.frame = remoteVideoView.frame
-//                self.embedView(localRenderer, into: remoteVideoView)
-//                //self.remoteView.sendSubviewToBack(localRenderer)
-//            }
-//           // remoteRenderer.frame = localView.frame
-//            self.embedView(remoteRenderer, into: self.localView)
-//            remoteRenderer.frame = localView.frame
-//            self.remoteView.sendSubviewToBack(localRenderer)
-////            view.setNeedsLayout()
-////            view.layoutIfNeeded()
-//            localView.setNeedsLayout()
-//            localView.layoutIfNeeded()
-//
-//
-//        }
-//        //self.view.bringSubviewToFront(localView)
-//    }
+
+    func setupToggleView(){
+        if isToggleView{
+            localRenderer.frame = remoteView.frame
+            remoteRenderer.frame = localView.frame
+            if let localVideoView = self.remoteView {
+                self.embedView(localRenderer, into: localVideoView)
+            }
+            if let localVideoView = self.localView {
+                self.embedView(remoteRenderer, into: localVideoView)
+            }
+        }else{
+            localRenderer.frame = remoteView.frame
+            remoteRenderer.frame = localView.frame
+            if let localVideoView = self.localView {
+                self.embedView(localRenderer, into: localVideoView)
+            }
+            if let localVideoView = self.remoteView {
+                self.embedView(remoteRenderer, into: localVideoView)
+            }
+        }
+        self.localView.addSubview(btnToggleView)
+    }
     
     private func embedView(_ view: UIView, into containerView: UIView) {
         containerView.addSubview(view)
@@ -253,17 +231,22 @@ class HomeVC: UIViewController {
         if txtCall.text!.isEmpty{
             AlertHelper.showAlert(controller: self, message: "Please enter name whom you want to call")
         }else{
-            //            let dict : [String:Any?] = ["type" : "start_call", "name":strUserName, "target":txtCall.text!, "data": nil]
             viewModel.targetUser = txtCall.text!
             viewModel.startCall()
         }
     }
     
+
     @IBAction func didPressToggle(_ sender: Any) {
         isToggelView = !isToggelView
        // switchView()
     }
     
+    @IBAction func onClickLocalView(_ sender: Any) {
+        DispatchQueue.main.async { [self] in
+            isToggleView = !isToggleView
+        }
+    }
 }
 
 extension HomeVC: SignalClientDelegate {
@@ -306,7 +289,9 @@ extension HomeVC: SignalClientDelegate {
                     }
                 }
             }else if type == "audio_muted"{
-                 if let videoStatus = responseJson["data"] as? Bool{
+
+                if let videoStatus = responseJson["data"] as? Bool{
+
                     DispatchQueue.main.async {
                         self.isMuteAudioOtherUser = videoStatus
                     }
@@ -321,10 +306,15 @@ extension HomeVC: SignalClientDelegate {
             // self.remoteView.removeFromSuperview()
            // self.remoteView.isHidden = true
             self.videoView.isHidden = true
+
             if self.remoteRenderer != nil {
                 self.remoteRenderer.removeFromSuperview()
                 self.remoteRenderer = nil
             }
+            self.isMuteAudioOtherUser = false
+            self.isPauseVideo = false
+            self.isMuteAudio = false
+            self.viewModel.targetUser = ""
             self.localRenderer = nil
             self.isCallPicked = false
             self.viewModel.webRTCClient.peerConnection.close()
@@ -361,9 +351,7 @@ extension HomeVC: SignalClientDelegate {
     @IBAction func onClickCameraOff(_ sender: Any) {
         isShowVideo = !isShowVideo
         viewModel.videoPause(isShowVideo:isShowVideo)
-//        let dic : [String:Any?] = ["type" : "video_pause", "name":viewModel.currentUser,"target":viewModel.targetUser, "data": isShowVideo]
-//        let strData = AlertHelper.convertJsonToString(dic: dic)
-//        viewModel.signalClient.sendData(data: strData)
+
     }
     
     @IBAction func onClickCameraSwitch(_ sender: Any) {

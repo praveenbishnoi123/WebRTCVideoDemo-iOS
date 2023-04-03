@@ -61,7 +61,7 @@ final class WebRTCClient: NSObject {
                                               optionalConstraints: ["DtlsSrtpKeyAgreement":kRTCMediaConstraintsValueTrue])
         
         let peerConnection = WebRTCClient.factory.peerConnection(with: config, constraints: constraints, delegate: nil)
-
+        
         self.peerConnection = peerConnection
         super.init()
         self.createMediaSenders()
@@ -226,7 +226,11 @@ final class WebRTCClient: NSObject {
         }
     }
 }
-
+extension WebRTCClient:RTCAudioSessionDelegate{
+    func audioSession(_ audioSession: RTCAudioSession, didSetActive active: Bool) {
+        debugPrint("session======= ",active.description)
+    }
+}
 extension WebRTCClient: RTCPeerConnectionDelegate {
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didChange stateChanged: RTCSignalingState) {
