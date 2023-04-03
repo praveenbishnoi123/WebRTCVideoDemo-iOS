@@ -24,8 +24,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var txtCall: UITextField!
     @IBOutlet weak var viewPauseMute: UIView!
     @IBOutlet weak var lblPauseMute: UILabel!
-    
     @IBOutlet weak var btnToggleView: UIButton!
+    
     let config = Config.default
     var isSendOffer = false
 
@@ -35,11 +35,6 @@ class HomeVC: UIViewController {
     var isCallPicked = false
     var isToggelView = false
     var viewModel = HomeViewModel()
-    @IBOutlet weak var localViewWidthCons: NSLayoutConstraint!
-    @IBOutlet weak var localViewHeightCons: NSLayoutConstraint!
-    
-    @IBOutlet weak var remoteViewWidthCons: NSLayoutConstraint!
-    @IBOutlet weak var remoteViewHeightCons: NSLayoutConstraint!
     var response : [String:Any] = [:]
 
     
@@ -234,12 +229,6 @@ class HomeVC: UIViewController {
             viewModel.targetUser = txtCall.text!
             viewModel.startCall()
         }
-    }
-    
-
-    @IBAction func didPressToggle(_ sender: Any) {
-        isToggelView = !isToggelView
-       // switchView()
     }
     
     @IBAction func onClickLocalView(_ sender: Any) {

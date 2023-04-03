@@ -177,9 +177,22 @@
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5be-nU-0bG" customClass="AADraggableView" customModule="WebRTCDemo" customModuleProvider="target">
                                                 <rect key="frame" x="177" y="15" width="128" height="155"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N5p-vM-bqx">
+                                                        <rect key="frame" x="0.0" y="0.0" width="128" height="155"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                        <connections>
+                                                            <action selector="onClickLocalView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PNZ-5E-qpz"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="128" id="9RY-rt-B3f"/>
+                                                    <constraint firstItem="N5p-vM-bqx" firstAttribute="top" secondItem="5be-nU-0bG" secondAttribute="top" id="IfT-CP-1lK"/>
+                                                    <constraint firstAttribute="bottom" secondItem="N5p-vM-bqx" secondAttribute="bottom" id="JjL-xc-7go"/>
+                                                    <constraint firstItem="N5p-vM-bqx" firstAttribute="leading" secondItem="5be-nU-0bG" secondAttribute="leading" id="WzU-nz-STE"/>
+                                                    <constraint firstAttribute="trailing" secondItem="N5p-vM-bqx" secondAttribute="trailing" id="b1d-Bk-tq7"/>
                                                     <constraint firstAttribute="height" constant="155" id="mUv-Ey-iVF"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
@@ -258,9 +271,6 @@
                                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                         <state key="normal" image="switch.2" catalog="system"/>
-                                                        <connections>
-                                                            <action selector="didPressToggle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rVb-kv-REZ"/>
-                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -303,6 +313,7 @@
                         <outlet property="btnCameraOff" destination="p0R-Zv-T8x" id="v83-HG-1gU"/>
                         <outlet property="btnCameraSwitch" destination="0Wr-Vu-gJT" id="zvA-lJ-wsh"/>
                         <outlet property="btnMute" destination="YVq-9u-09z" id="F4G-uJ-1ry"/>
+                        <outlet property="btnToggleView" destination="N5p-vM-bqx" id="IUh-aD-oOX"/>
                         <outlet property="callingLbl" destination="k7T-NJ-c0V" id="tGz-yl-cKp"/>
                         <outlet property="callingView" destination="Wzy-nt-HYB" id="c1m-xr-9Eq"/>
                         <outlet property="lblPauseMute" destination="THz-Fl-90F" id="1qe-eJ-oIs"/>
