@@ -16,35 +16,5 @@ class AlertHelper{
         DispatchQueue.main.async {
             controller.present(alert, animated: true, completion: nil)
         }
-        
-    }
-    class func convertJsonToString(dic:[String:Any?]) ->String {
-        do{
-            let jsonData = try! JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-            let convertedString = String(data: jsonData, encoding: .utf8)
-            //print("convertedString=== ",convertedString)
-            return convertedString ?? ""
-            //self.webRTCClient.sendData(data)
-        }
-    }
-    class func convertToJson(text: String) -> [String: Any]? {
-        if let data = text.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        return nil
-    }
-    class func getStringSafe(str:Any?) -> String{
-        if let data = str as? Int{
-            return String(data)
-        }else if let data = str as? Double{
-            return String(data)
-        }else if let data = str as? String{
-            return data
-        }
-        return ""
     }
 }

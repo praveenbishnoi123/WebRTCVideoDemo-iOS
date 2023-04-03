@@ -26,7 +26,7 @@ class HomeViewModel {
     func startCall() {
         let dict : [String:Any?] = ["type" : "start_call", "name":currentUser, "target":targetUser, "data": nil]
         print("dict \(dict)")
-        let strData = AlertHelper.convertJsonToString(dic: dict)
+        let strData = Helper.convertJsonToString(dic: dict)
         self.signalClient.sendData(data: strData)
     }
     
@@ -41,7 +41,7 @@ class HomeViewModel {
     }
     
     func createAnswer(dict: [String:Any], completion : @escaping ()-> Void) {
-        let strSdp = AlertHelper.getStringSafe(str: dict["data"])
+        let strSdp = Helper.getStringSafe(str: dict["data"])
         let remoteSDP = RTCSessionDescription(type: .offer, sdp: strSdp)
         self.webRTCClient.set(remoteSdp: remoteSDP) { error in
             
@@ -49,9 +49,9 @@ class HomeViewModel {
                 self.webRTCClient.answer { sdp in
                     let offer : [String:Any] = ["type":sdp.type.rawValue,"sdp":sdp.sdp]
                     
-                    let dict : [String:Any?] = ["type" : "create_answer", "name":self.currentUser, "target":AlertHelper.getStringSafe(str: dict["name"]), "data": offer]
+                    let dict : [String:Any?] = ["type" : "create_answer", "name":self.currentUser, "target":Helper.getStringSafe(str: dict["name"]), "data": offer]
                     print("dict \(dict)")
-                    let strData = AlertHelper.convertJsonToString(dic: dict)
+                    let strData = Helper.convertJsonToString(dic: dict)
                     self.signalClient.sendData(data: strData)
                     completion()
                 }
@@ -65,7 +65,7 @@ class HomeViewModel {
         guard let condidateJson = dict["data"] as? [String:Any] else {
             return
         }
-        let candidate = RTCIceCandidate.init(sdp: AlertHelper.getStringSafe(str: condidateJson["sdpCandidate"]), sdpMLineIndex: Int32(AlertHelper.getStringSafe(str: condidateJson["sdpMLineIndex"])) ?? 0, sdpMid: AlertHelper.getStringSafe(str: condidateJson["sdpMid"]))
+        let candidate = RTCIceCandidate.init(sdp: Helper.getStringSafe(str: condidateJson["sdpCandidate"]), sdpMLineIndex: Int32(Helper.getStringSafe(str: condidateJson["sdpMLineIndex"])) ?? 0, sdpMid: Helper.getStringSafe(str: condidateJson["sdpMid"]))
         print("Received remote candidate==")
         self.webRTCClient.set(remoteCandidate: candidate) {
             print("Received remote candidate")
@@ -73,7 +73,7 @@ class HomeViewModel {
     }
     
     func setRemoteSdp(dict : [String:Any],completion : @escaping ()-> Void) {
-        let strSdp = AlertHelper.getStringSafe(str: dict["data"])
+        let strSdp = Helper.getStringSafe(str: dict["data"])
         let remoteSDP = RTCSessionDescription(type: .answer, sdp: strSdp)
         self.webRTCClient.set(remoteSdp: remoteSDP) { error in
             if error != nil {
@@ -105,14 +105,22 @@ class HomeViewModel {
     
     // Common method for data send to server
     func callDataToServer(data:[String:Any?]) {
-        let strData = AlertHelper.convertJsonToString(dic: data)
+        let strData = Helper.convertJsonToString(dic: data)
         self.signalClient.sendData(data: strData)
     }
     
     func videoPause(isShowVideo:Bool) {
         let dict : [String:Any?] = ["type" : "video_pause", "name":currentUser,"target":targetUser, "data": isShowVideo]
         print("dict \(dict)")
-        let strData = AlertHelper.convertJsonToString(dic: dict)
+        let strData = Helper.convertJsonToString(dic: dict)
+        self.signalClient.sendData(data: strData)
+    }
+    
+    // Use this method for mute audio
+
+    func audioMute(isMute:Bool) {
+        let dic : [String:Any?] = ["type" : "audio_mute", "name":currentUser,"target":targetUser, "data": isMute]
+        let strData = Helper.convertJsonToString(dic: dic)
         self.signalClient.sendData(data: strData)
     }
 }

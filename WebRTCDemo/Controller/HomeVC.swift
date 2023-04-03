@@ -11,6 +11,7 @@ import AVKit
 
 class HomeVC: UIViewController {
     
+    @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var callingView: UIStackView!
     @IBOutlet weak var callingLbl: UILabel!
     @IBOutlet weak var lblSignalStatus: UILabel!
@@ -31,6 +32,7 @@ class HomeVC: UIViewController {
     var remoteRenderer : RTCEAGLVideoView!
     
     var isCallPicked = false
+    var isToggelView = false
     var viewModel = HomeViewModel()
     var response : [String:Any] = [:]
 
@@ -71,7 +73,7 @@ class HomeVC: UIViewController {
         }
     }
     
-    var isPauseVideo:Bool = true{
+    var isPauseVideo:Bool = false {
         didSet{
             if isPauseVideo{
                 viewPauseMute.isHidden = false
@@ -82,11 +84,23 @@ class HomeVC: UIViewController {
             }
         }
     }
-    var isMuteVideo:Bool = true{
+//    var isMuteVideo:Bool = true {
+//        didSet{
+//            if isMuteVideo{
+//                viewPauseMute.isHidden = false
+//                lblPauseMute.text = "Mute"
+//            }else{
+//                lblPauseMute.text = ""
+//                viewPauseMute.isHidden = true
+//            }
+//        }
+//    }
+    
+    var isMuteAudioOtherUser:Bool = false{
         didSet{
-            if isMuteVideo{
+            if isMuteAudioOtherUser{
                 viewPauseMute.isHidden = false
-                lblPauseMute.text = "Mute"
+                lblPauseMute.text = "Call muted"
             }else{
                 lblPauseMute.text = ""
                 viewPauseMute.isHidden = true
@@ -102,7 +116,7 @@ class HomeVC: UIViewController {
         print("isVideoEnable \(Helper.checkifVideoEnable())")
         self.signalingConnected = false
         viewPauseMute.layer.cornerRadius = 10
-        isMuteVideo = false
+        //isMuteVideo = false
         isPauseVideo = false
         initiateConnection()
     }
@@ -126,9 +140,30 @@ class HomeVC: UIViewController {
         self.viewModel.webRTCClient.delegate = self
     }
     
+    override func viewDidLayoutSubviews() {
+        if isToggelView {
+            DispatchQueue.main.async {
+                if self.localRenderer != nil {
+                    self.localRenderer.frame = self.remoteView.frame
+                }
+               
+            }
+           
+        }else{
+            DispatchQueue.main.async {
+                if self.remoteRenderer != nil {
+                    self.remoteRenderer.frame = self.localView.frame
+                }
+               
+            }
+          
+        }
+    }
+    
     func setUpView() {
         self.txtCall.resignFirstResponder()
-        self.remoteView.isHidden = false
+       // self.remoteView.isHidden = false
+        self.videoView.isHidden = false
         self.localRenderer = RTCEAGLVideoView(frame: localView?.frame ?? CGRect.zero)
         self.remoteRenderer = RTCEAGLVideoView(frame: remoteView.frame)
         self.localRenderer.contentMode = .scaleAspectFit
@@ -140,12 +175,43 @@ class HomeVC: UIViewController {
             self.embedView(localRenderer, into: localVideoView)
         }
         self.localView.reposition = .edgesOnly
-        //self.localView.respectedView = remoteView
+        self.localView.respectedView = remoteView
         self.localRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.remoteRenderer.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.embedView(remoteRenderer, into: self.remoteView)
         self.remoteView.sendSubviewToBack(remoteRenderer)
     }
+    
+//    func switchView() {
+//        if isToggelView {
+//
+//            if let localVideoView = self.localView {
+//                localRenderer.frame = localVideoView.frame
+//                self.embedView(localRenderer, into: localVideoView)
+//            }
+//           // remoteRenderer.frame = remoteView.frame
+//            self.embedView(remoteRenderer, into: self.remoteView)
+//            self.remoteView.sendSubviewToBack(remoteRenderer)
+//        }else{
+//
+//            if let remoteVideoView = self.remoteView {
+//                //localRenderer.frame = remoteVideoView.frame
+//                self.embedView(localRenderer, into: remoteVideoView)
+//                //self.remoteView.sendSubviewToBack(localRenderer)
+//            }
+//           // remoteRenderer.frame = localView.frame
+//            self.embedView(remoteRenderer, into: self.localView)
+//            remoteRenderer.frame = localView.frame
+//            self.remoteView.sendSubviewToBack(localRenderer)
+////            view.setNeedsLayout()
+////            view.layoutIfNeeded()
+//            localView.setNeedsLayout()
+//            localView.layoutIfNeeded()
+//
+//
+//        }
+//        //self.view.bringSubviewToFront(localView)
+//    }
     
     private func embedView(_ view: UIView, into containerView: UIView) {
         containerView.addSubview(view)
@@ -154,7 +220,7 @@ class HomeVC: UIViewController {
                                                                     options: [],
                                                                     metrics: nil,
                                                                     views: ["view":view]))
-        
+
         containerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view]|",
                                                                     options: [],
                                                                     metrics: nil,
@@ -192,16 +258,22 @@ class HomeVC: UIViewController {
             viewModel.startCall()
         }
     }
+    
+    @IBAction func didPressToggle(_ sender: Any) {
+        isToggelView = !isToggelView
+       // switchView()
+    }
+    
 }
 
 extension HomeVC: SignalClientDelegate {
     
     func signalClientReceiveString(_ signalClient: SignalingClient, didReceiveString data: String) {
       
-        if let responseJson = AlertHelper.convertToJson(text: data) {
+        if let responseJson = Helper.convertToJson(text: data) {
             print("responseJson \(responseJson)")
-            let type = AlertHelper.getStringSafe(str: responseJson["type"])
-            let status = AlertHelper.getStringSafe(str: responseJson["data"])
+            let type = Helper.getStringSafe(str: responseJson["type"])
+            let status = Helper.getStringSafe(str: responseJson["data"])
             if status == "user is not online" {
                 AlertHelper.showAlert(controller: self, message: "User is not online")
             }else if status == "User is ready for call"{
@@ -209,7 +281,7 @@ extension HomeVC: SignalClientDelegate {
                 
             }else if type == "offer_received" {
                 self.response = responseJson
-                let targetUser = AlertHelper.getStringSafe(str: responseJson["name"])
+                let targetUser = Helper.getStringSafe(str: responseJson["name"])
                 viewModel.targetUser = targetUser
                 DispatchQueue.main.async {
                     self.callingLbl.text = "\(targetUser) is calling you"
@@ -233,6 +305,12 @@ extension HomeVC: SignalClientDelegate {
                         self.isPauseVideo = !videoStatus
                     }
                 }
+            }else if type == "audio_muted"{
+                 if let videoStatus = responseJson["data"] as? Bool{
+                    DispatchQueue.main.async {
+                        self.isMuteAudioOtherUser = videoStatus
+                    }
+                }
             }
             debugPrint("didReceiveString=== ",responseJson)
         }
@@ -241,7 +319,8 @@ extension HomeVC: SignalClientDelegate {
     func removeVideoViewsOnDisconnectCall() {
         DispatchQueue.main.async {
             // self.remoteView.removeFromSuperview()
-            self.remoteView.isHidden = true
+           // self.remoteView.isHidden = true
+            self.videoView.isHidden = true
             if self.remoteRenderer != nil {
                 self.remoteRenderer.removeFromSuperview()
                 self.remoteRenderer = nil
@@ -276,6 +355,7 @@ extension HomeVC: SignalClientDelegate {
     
     @IBAction func onClickMute(_ sender: Any) {
         isMuteAudio = !isMuteAudio
+        viewModel.audioMute(isMute: isMuteAudio)
     }
     
     @IBAction func onClickCameraOff(_ sender: Any) {
